@@ -1,0 +1,302 @@
+<!--
+  - Program Name: index.html (main webpage)
+  - Author(s):       Trevor Kvanvig, Eliran Chomoshe, Ivanna Vazquez, Kyle McCollum
+  - Notes:     	 Website's Homepage Structure, Websites Utilizes Bootstrap 5 Framework
+    - * Eli - Work on cleaning up code ...
+    - * Eli - Work on organizing structure ... 
+  -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;900&family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+
+    <!-- Bootstrap CSS CDN-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    
+    <!--Custom CSS & Tab Properties -->
+    <link rel="stylesheet" href="./styles.css">
+    <title>Corrective Measures</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+  </head>
+
+  <!-- Webpage Body -->
+  <body>
+
+    <!-- Webpage Header -->
+    <header class="site-header sticky-top py-1">
+
+      <!-- Bootstrap Navbar -->
+      <nav class="navbar fixed-top navbar-expand-md navbar navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="./index.html">Corrective Measures</a>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="./index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./services.html">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./contact.html">Contact</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./about.html">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./login.html">Login</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Section -->
+    <main>
+
+      <!-- Bootstrap Carousel -->
+      <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
+        <div class="carousel-inner">
+
+          <!-- Carousel: Page 1-->
+          <div class="carousel-item active carousel1">
+            <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 txt-white">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6 my-auto">
+                    <h1 class="font-3 fw-normal title-page">Effortlessly tackle challenges with our ticketing solutions!</h1>
+                  </div>
+                  <div class="col-md-6 my-auto text-center">
+                    <img class="img-fluid rounded-circle rounded-img-placement" src="./images/gears.jpg" alt="your-image-alt-here">
+                  </div>
+                </div>
+              </div>
+              <div class="product-device shadow-sm d-none d-md-block"></div>
+              <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+            </div>
+          </div>
+          <!-- Carousel: Page 2-->
+          <div class="carousel-item carousel2">
+            <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 txt-black">
+              <div class="container">
+                <div class="row" style="flex-direction: row-reverse;">
+                  <div class="col-md-6 my-auto">
+                    <h1 class="font-3 fw-normal title-page">Simplify your workload with our seamless system!</h1>
+                  </div>
+                  <div class="col-md-6 my-auto text-center">
+                    <img class="img-fluid rounded-circle rounded-img-placement" src="./images/pm.jpg" alt="your-image-alt-here">
+                  </div>
+                </div>
+              </div>
+              <div class="product-device shadow-sm d-none d-md-block"></div>
+              <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+            </div>
+          </div>
+          <!-- Carousel: Page 3-->
+          <div class="carousel-item carousel3">
+            <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 txt-white">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6 my-auto">
+                    <h1 class="font-3 fw-normal title-page">Streamline your workflow with our efficient issue management system!</h1>
+                  </div>
+                  <div class="col-md-6 my-auto text-center">
+                    <img class="img-fluid rounded-circle rounded-img-placement" src="./images/p3.jpg" alt="your-image-alt-here">
+                  </div>
+                </div>
+              </div>
+              <div class="product-device shadow-sm d-none d-md-block"></div>
+              <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Carousel: Arrows-->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <!-- Body: Section 1-->
+      <section class="container-fluid bg-light py-5">
+        <div class="row">
+          <h2 class="text-center pb-2 border-bottom display-2 ">Issue Tracking and Reporting for Teams</h2>
+          <div class="col-12 text-left p-width">
+            <div class="flt-right"></div>
+            <p>Currently, there are various support ticketing software systems that are commercially available. However, most of the current software largely deals with IT support and is rigid by design. This leaves out many; such as computer scientists, engineers, and more, who could benefit from such a system. Other issues include the struggle in developing software as a team and keeping all the group members updated on where the software currently is in the development process, as well as group members knowing exactly what they have to accomplish.</p>
+            <div class="clearfix"></div>
+            <div class="flt-left"></div>
+            <p class="bdy2">Corrective Measures would be an enhancement to support ticket tracking software currently on the market. One in which users create a support or bug ticket that allows other engineers to track via web portal. Users will be able to post requests such as bugs or completed tasks to allow the team to know where the entire project is currently at in the development process. This software will be useful for keeping a team on track during the development process as well as allow easier deadline estimations.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Body: Section 2-->
+      <div class="position-relative overflow-hidden p-3 bg3-image">
+        <div class="col-md-8 p-lg-5 mx-auto my-5">
+          <h2 class="display-5 fw-normal txt-white"">" Effortlessly track and resolve issues with our powerful online ticketing system, designed to simplify your workload and keep your team productive." <br>- Corrective Measure's CEO </h2>
+        </div>
+        <div class="product-device shadow-sm d-none d-md-block"></div>
+        <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+      </div>
+
+      <!-- Cards -->
+      <section id="cards">
+        <h2 id="card-title" class="section-heading text-center display-2">An Application Made For Your Needs</h2>
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="card">
+              <div class="card-header text-center">
+                <h3>Organization</h3>
+                <img class="img-fluid rounded-circle rounded-card-placement" src="./images/org.jpg" alt="your-image-alt-here">
+              </div>
+              <div class="card-body">
+                <p>Tickets can be categorized, prioritized, and assigned to specific team members, ensuring that issues, such as bugs, are addressed in a timely and efficient manner. This streamlined ticketing system not only facilitates swift resolution of issues, but also allows for easy tracking of progress and enables effective communication among team members.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="card">
+              <div class="card-header text-center">
+                <h3>Accountability</h3>
+                <img class="img-fluid rounded-circle rounded-card-placement" src="./images/acct.jpg" alt="your-image-alt-here">
+              </div>
+              <div class="card-body">
+                <p>Accountability provided by a ticketing system helps ensure that issues are addressed promptly and team members are held responsible for their role in the process. Moreover, the data collected from a ticketing system can be utilized to analyze trends, identify recurring issues, and make informed decisions to improve the overall quality of the product or service. </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card">
+              <div class="card-header text-center">
+                <h3>Efficiency</h3>
+                <img class="img-fluid rounded-circle rounded-card-placement" src="./images/efficiency.jpg" alt="your-image-alt-here">
+              </div>
+              <div class="card-body">
+                <p> The efficiency resulting from a ticketing system helps teams address issues more quickly and effectively, saving time and resources in the long run. This, in turn, not only enhances customer satisfaction but also boosts team morale, as team members are empowered with the tools and resources they need to resolve issues in a timely and efficient manner. </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Image Section -->
+      <div class="position-relative overflow-hidden p-3 p-md-5 text-center bg2-image img-fluid">
+        <div class="col-md-5 p-lg-5 mx-auto my-5"></div>
+        <div class="product-device shadow-sm d-none d-md-block"></div>
+        <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+      </div>
+
+      <!-- Coming Soon Section -->
+      <div class="position-relative overflow-hidden p-3 p-md-5 text-center bg1-image">
+        <div class="col-md-5 p-lg-5 mx-auto my-5">
+          <h2 class="display-2 fw-normal txt-black">Corrective Measures</h2>
+          <p class="lead fw-normal">Measure up to success with our corrective measures!</p>
+          <a class="btn btn-outline-secondary" href="#">Coming soon</a>
+        </div>
+        <div class="product-device shadow-sm d-none d-md-block"></div>
+        <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container-fluid py-5">
+      <div class="row">
+        <div class="col-12 col-md">
+          <img class="img-fluid logo-dim" src="./images/office-building.png" alt="your-image-alt-here">
+          <small class="d-block mb-3 text-muted">&copy; 2023</small>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Features</h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a class="link-secondary" href="#">Mission Statement</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">About Us</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">What We Do</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">What We Offer</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Meet The Team</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Create Account</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Resources</h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a class="link-secondary" href="#">News</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Business</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Online Tools</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Careers</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Resources</h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a class="link-secondary" href="#">Education</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Articles</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Contributors</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">More Information</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-6 col-md">
+          <h5>About</h5>
+          <ul class="list-unstyled text-small">
+            <li>
+              <a class="link-secondary" href="#">Team</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Contact Us</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Privacy</a>
+            </li>
+            <li>
+              <a class="link-secondary" href="#">Terms</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <a href="https://www.flaticon.com/free-icons/company" title="company icons">Company icons created by Freepik - Flaticon</a>
+    </footer>
+
+    <!-- Bootstrap JS CDN-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
