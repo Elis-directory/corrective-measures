@@ -14,7 +14,10 @@ import {
     doc,
     getDoc,
     query,
-    getDocs 
+    getDocs, 
+    orderBy,
+    addDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -101,6 +104,7 @@ onAuthStateChanged(auth, user =>{
     if(user){ // If there is a user currently logged in
         console.log('user logged in: ', user);
         
+        
     } else { // if user is not currently logged in
         console.log('user logged out');
     }
@@ -141,7 +145,7 @@ if(loginForm){
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            window.location.href = "dashboard.html";
+            window.location.href = "dashboard.html"; // function directToDashboard();
             console.log('user login: ', user);
             loginForm.reset(); // reset signup form delared above
         })
@@ -157,20 +161,96 @@ if(loginForm){
 
 //================================================================================================
 
+// function creatNewAccount(username, password, email)
+
+// function logoutUser(message);
+
+// function authenticateCredentials(username, password);
+
 // function directToDashboard();
 
 // function getUserDetails();
 
-// function viewTicketList();
+//===========================================Show Tickets On Site===================================
 
+// function viewTicketList();
+//setup tickets
+const ticketList = document.querySelector('#TicketList')
+const setupTickets = (data) => { // get snapshot
+    if(data.length != 0){
+      let html = ""; // plank template to append html
+      data.forEach(doc => { // go through snapshot. return each doc as a element
+      const tickets = doc // det data from doc
+      // create html code with elements from data base
+      const li = `              
+      <li>
+        <div class="center-align collapsible-header grey lighten-4 ">Priority: ${tickets.Priority} ${tickets.Title}</div>
+        <div class="collapsible-body white">${tickets.TDescription}</div>
+      </li>
+      `;
+      html += li // append each data
+      });
+      ticketList.innerHTML = html; // add to Html file from abve defined place
+    
+    }else{
+        ticketList.innerHTML = '<h5 class ="center-align">THERE ARE NO TICKETS</h5>'
+    }
+    
+}
+// create refrence to collection
+const colRef = collection(db, 'Tickets')
+const q = query(colRef, orderBy("Priority"));
+// get collection data
+getDocs(q) // getDocs returns a snapshot
+    .then((snapshot) => { // when a snapshot is recived
+        let tickets = []
+        snapshot.docs.forEach(doc => {
+            tickets.push({...doc.data(), id: doc.id })
+        });
+        console.log(tickets)
+        setupTickets(tickets);
+    })
+    .catch(err => {
+        console.log(err.message)
+        setupTickets([]);
+    })
+
+//================================================================================================
 // function viewTicketDetails(ticket);
 
-// function createNewTicket(ticket);
 
+//===========================================Create Ticket========================================
+// function createNewTicket(ticket);
+//const collection = colRef(db, 'Tickets')
+const addTicketForm = document.querySelector('.add')
+addTicketForm.addEventListener('submit', (e) => {
+    e.preventDefault() // stops page from refreshing
+    addDoc(colRef, {
+        Title: addTicketForm.title.value,
+        Priority: addTicketForm.priority.value,
+        TDescription: addTicketForm.description.value,
+    }).then(()=> {
+        addTicketForm.reset() // clear form
+    })
+})
+//================================================================================================
 // function editTicketDetails(ticket, newDetails);
 
+//===========================================Delete Ticket========================================
 // function deleteTicket(ticket);
+const DTicketForm = document.querySelector('.delete')
+DTicketForm.addEventListener('submit', (e) => {
+    e.preventDefault() // stops page from refreshing
 
+    const docRef = doc(db, 'Tickets', DTicketForm.id.value)
+    deleteDoc(docRef)
+        .then(() => {
+            DTicketForm.reset()
+            
+        })
+      
+})
+//================================================================================================
 // function changePassword(oldPassword, newPassword);
 
 // function viewProjectList(accountId);
