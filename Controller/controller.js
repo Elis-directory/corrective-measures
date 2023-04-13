@@ -21,15 +21,38 @@ import {
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//     apiKey: "AIzaSyBxM_vt4dG48Wmf6t3FmcKNReYmgtjjDxU",
+//     authDomain: "correctivemeasures-7fd32.firebaseapp.com",
+//     projectId: "correctivemeasures-7fd32",
+//     storageBucket: "correctivemeasures-7fd32.appspot.com",
+//     messagingSenderId: "732418944057",
+//     appId: "1:732418944057:web:e1846d05b462557ce331e8",
+//     measurementId: "G-8M80GCH78F"
+//   };
+
 const firebaseConfig = {
+
   apiKey: "AIzaSyBxM_vt4dG48Wmf6t3FmcKNReYmgtjjDxU",
+
   authDomain: "correctivemeasures-7fd32.firebaseapp.com",
+
+  databaseURL: "https://correctivemeasures-7fd32-default-rtdb.firebaseio.com",
+
   projectId: "correctivemeasures-7fd32",
+
   storageBucket: "correctivemeasures-7fd32.appspot.com",
+
   messagingSenderId: "732418944057",
+
   appId: "1:732418944057:web:e1846d05b462557ce331e8",
+
   measurementId: "G-8M80GCH78F"
+
 };
+
+  
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -118,6 +141,7 @@ if(loginForm){
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
+            window.location.href = "dashboard.html";
             console.log('user login: ', user);
             loginForm.reset(); // reset signup form delared above
         })
