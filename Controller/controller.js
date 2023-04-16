@@ -222,23 +222,25 @@ getDocs(q) // getDocs returns a snapshot
 //===========================================Create Ticket========================================
 // function createNewTicket(ticket);
 //const collection = colRef(db, 'Tickets')
-const addTicketForm = document.querySelector('.add')
+const addTicketForm = document.querySelector('#addTicket-form')
 addTicketForm.addEventListener('submit', (e) => {
     e.preventDefault() // stops page from refreshing
     addDoc(colRef, {
         Title: addTicketForm.title.value,
         Priority: addTicketForm.priority.value,
         TDescription: addTicketForm.description.value,
+        
     }).then(()=> {
         addTicketForm.reset() // clear form
     })
+    
 })
 //================================================================================================
 // function editTicketDetails(ticket, newDetails);
 
 //===========================================Delete Ticket========================================
 // function deleteTicket(ticket);
-const DTicketForm = document.querySelector('.delete')
+const DTicketForm = document.querySelector('#deleteTicket-form')
 DTicketForm.addEventListener('submit', (e) => {
     e.preventDefault() // stops page from refreshing
 
@@ -246,7 +248,8 @@ DTicketForm.addEventListener('submit', (e) => {
     deleteDoc(docRef)
         .then(() => {
             DTicketForm.reset()
-            
+            DTicketForm.modal('hide')
+        
         })
       
 })
