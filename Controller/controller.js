@@ -95,12 +95,14 @@ function createBoardsFromDB() {
 
 
 const addBoardBtn = document.getElementById("add-board-btn")
+if (addBoardBtn){
+    addBoardBtn.addEventListener("click", function (e) {
+        console.log('click add board')
+        e.preventDefault(); // stops default action
+        addNewBoard()
+    })
+}
 
-addBoardBtn.addEventListener("click", function (e) {
-    console.log('click add board')
-    e.preventDefault(); // stops default action
-    addNewBoard()
-})
 
 
 function addNewBoard() {
@@ -227,7 +229,7 @@ function createNewTicket(getInfo, boardId) {
             .then(() => {
                 console.log("Ticket added to Firestore!");
                 getInfo.reset()
-                const modal = getInfo()
+                const modal = getInfo
                 M.Modal.getInstance(modal).close(); // close the modal
             })
             .catch((error) => {
@@ -261,9 +263,10 @@ if (signupForm) {
 
         createUserWithEmailAndPassword(auth, email, password).then(cred => {
             console.log('user just signed up: ', cred); // console will display user that just signed in if worked correctly
-
-
             signupForm.reset(); // reset signup form delared above
+            window.location.href = "dashboard.html";
+
+            
         }).catch((error) => {
 
             // display errors
