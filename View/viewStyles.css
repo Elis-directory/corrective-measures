@@ -1,0 +1,47 @@
+.myModalStyling{
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+    
+}
+
+.board-container {
+    max-height: 800px;
+    border: 1px solid black;
+    background-color: black;
+    display: flex;
+    overflow-x: auto;
+}
+
+.board-container::-webkit-scrollbar {
+    width: 2;
+}
+
+.board {
+    min-width: 500px;
+    height: 700px;
+    margin: 20px;
+    line-height: 100px;
+    background-color: ghostwhite;
+    border: 1px solid black;
+    position: relative;
+    max-height: 800px;
+    overflow-y: auto;
+    text-align: center;
+    padding-top: 30px;
+    
+}
+
+.add-board-btn{
+    margin-bottom: 15px;
+}
+
+.btn
+{
+
+    background-color: black;  
+}
+
+.btn:hover {
+    background-color: lightgrey;
+  }
