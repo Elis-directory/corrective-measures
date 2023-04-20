@@ -264,7 +264,11 @@ if (signupForm) {
         createUserWithEmailAndPassword(auth, email, password).then(cred => {
             console.log('user just signed up: ', cred); // console will display user that just signed in if worked correctly
             signupForm.reset(); // reset signup form delared above
-            window.location.href = "dashboard.html";
+
+           // window.location.href = "dashboard.html";
+
+           // window.location.href = "dashboard.html";
+
 
             
         }).catch((error) => {
