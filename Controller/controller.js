@@ -210,6 +210,40 @@ function deleteBoard(board, elem) {
     deleteDoc(board);
 }
 
+
+
+//===========================================User Class========================================
+
+
+class User {
+    constructor (userName, email, password, role) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+	this.role = role;
+    }
+    toString() {
+        return this.name;
+    }
+}
+
+// Firestore data converter
+const userConverter = {
+    toFirestore: (user) => {
+        return {
+            name: user.userName,
+            email: user.email,
+            password: user.password,
+	    role: user.role
+            };
+    },
+    fromFirestore: (snapshot, options) => {
+        const data = snapshot.data(options);
+        return new User(user.userName, user.email, user.password, user.role);
+    }
+};
+
+
 //===========================================Create Ticket========================================
 function createNewTicket(getInfo, boardId) {
 
@@ -250,23 +284,36 @@ function createNewTicket(getInfo, boardId) {
 
 //=======================ADD NEW USER AFTER SUBMIT BUTTON IS PRESSED==============================
 //####function creatNewAccount(username, password, email)####
-
 const signupForm = document.querySelector('#signup-form'); // get entire signup form and its contents
 if (signupForm) {
-    signupForm.addEventListener('submit', (e) => { // once form is sumbited with button press
+    signupForm.addEventListener('submit', (e) => { // once form is submitted with button press
         e.preventDefault(); // prevents default action
 
         //get user info
         const email = signupForm['signup-email'].value;
         const password = signupForm['signup-password'].value;
+        const role = signupForm['signup-account-type'].value;
         console.log(email, password);
 
-        createUserWithEmailAndPassword(auth, email, password).then(cred => {
+        // Create the user account in Firebase Authentication
+        createUserWithEmailAndPassword(auth, email, password).then((cred) => {
             console.log('user just signed up: ', cred); // console will display user that just signed in if worked correctly
-            signupForm.reset(); // reset signup form delared above
-           // window.location.href = "dashboard.html";
 
-            
+            // Add the user's information to Firestore with a unique ID
+            const usersRef = collection(db, 'Users');
+            addDoc(usersRef, {
+                email: email,
+                password: password,
+                role: role,
+            }).then(() => {
+                console.log('User added to Firestore');
+            }).catch((error) => {
+                console.error('Error adding user to Firestore: ', error);
+            });
+
+            signupForm.reset(); // reset signup form delared above
+            // window.location.href = "dashboard.html";
+
         }).catch((error) => {
 
             // display errors
@@ -281,6 +328,8 @@ if (signupForm) {
 
     })
 }
+
+
 
 //================================================================================================
 
