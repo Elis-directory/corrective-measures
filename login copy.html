@@ -1,10 +1,9 @@
 <!--
-  - Program Name: signup.html (main webpage)
-  - Author(s):       Trevor Kvanvig, Eliran Chomoshe, Ivanna Vazquez, Kyle McCollum
-  - Notes:     	 Website's 'Sign up' page Structure, Websites Utilizes Bootstrap 5 Framework
-    - * Work on .... Success message/ fail message
-    - * Work on .... Verification email ?
-    - * Work on .... Footer
+  - Program Name: login.html (main webpage)
+  - Author(s):    Trevor Kvanvig, Eliran Chomoshe, Ivanna Vazquez, Kyle McCollum
+  - Notes:     	 Website's 'login' page Structure, Websites Utilizes Bootstrap 5 Framework
+    - * Work on .... Fail message
+    - * Work on ....
   -->
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +45,7 @@
                 <a class="nav-link" href="./contact.html">Contact</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="./about.html">About</a>
+                <a class="nav-link" href="=./about.html">About</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="./login.html">Login</a>
@@ -61,53 +60,47 @@
     </header>
 
 
-	
+	<main> 
+
+<!--LOGIN FORM-->
+
 
 
 <div class="form-signin w-100 m-auto signup-image">
- <h1>Create an Account</h1>
- <div style="display: flex; justify-content: center; align-items: center; height: 50vh;">
-
-
-  <!--SIGNUP FORM-->
-  <form action="" method="post" style="display: flex; flex-direction: column;" id="signup-form">
-    <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 10px;">
-        <label for="signup-username" style="width: 120px; margin-right: 10px;">Username:</label>
-        <input type="text" id="signup-username" name="username" required>
+  <form action="" method="post" style="display: flex; flex-direction: column;" id="login-form">
+    <img class="mb-4" src="./images/pika.png" alt="" width="72" height="57">
+    <h1 class="pt2 font-3 text-center col-md-5 mx-auto my-5 ">Please sign in</h1>
+	<div class="login-form">
+    <div class="form-floating">
+      <input type="email" class="form-control" id="login-email" placeholder="name@example.com" name="email" required>
+      <label for="login-email">Email address</label>
     </div>
-
-    <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 10px;">
-        <label for="signup-email" style="width: 120px; margin-right: 10px;">Email:</label>
-        <input type="email" id="signup-email" name="email" required>
+    <div class="form-floating">
+      <input type="password" class="form-control" id="login-password" placeholder="Password" name="password" required>
+      <label for="login-password">Password</label>
     </div>
-
-    <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 10px;">
-        <label for="signup-password" style="width: 120px; margin-right: 10px;">Password:</label>
-        <input type="password" id="signup-password" name="password" required>
+    <div class="checkbox mb-3" >
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
     </div>
- <!-- <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 10px;">
-        <label for="signup-account-type" style="width: 120px; margin-right: 10px;">Account Type:</label>
-  <select name="type" id="signup-account-type">
-    <option value="Admin" ">Admin</option>
-    <option value="User">User</option>
-  </select>
-    </div> -->
+	
+    		<button class="w-100 btn btn-lg btn-secondary" style="margin-top: 1rem; margin-bottom: .5rem; background-color: #FFD700;" type="submit" >Sign in</button>
+
+<a href="#"  class="text-center" style="padding-bottom: 20px; margin-left: 33%; margin-top: 33%;" >Forgot Password?</a>
 
 
-    <!--REMOVED CONFIRM PASSWORD FOR TESTING-->
-    <!--<div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 10px;">
-      <label for="confirm-signup-password" style="width: 120px; margin-right: 10px;">Confirm Password:</label>
-      <input type="password" id="confirm-signup-password" name="confirm-password" required>
-    </div>-->
+ 		<button class="w-100 btn btn-lg btn-secondary" style="margin-top: .5rem; background-color: #FFA500;" type="submit" ><a href="./signup.html"  style="padding-bottom: 20px;" >Sign Up</a> </button>
+	</div>
 
-    <input type="submit" value="Create Account">
+</div>
+
+   
   </form>
 
-</div>
-</div>
 
-</div>
-   
+  
+
 <!-- Footer -->
     <footer class="container-fluid py-5">
       <div class="row">
@@ -194,13 +187,9 @@
     </footer>
 
     <!-- Bootstrap JS CDN-->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script type="module" src="/Controller/controller.js"></script>
-<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
 
-<!-- Add Firebase products that you want to use -->
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"></script>
 
   </body>
