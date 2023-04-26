@@ -292,7 +292,7 @@ if (signupForm) {
         //get user info
         const email = signupForm['signup-email'].value;
         const password = signupForm['signup-password'].value;
-        const role = signupForm['signup-account-type'].value;
+       // const role = signupForm['signup-account-type'].value;
         console.log(email, password);
 
         // Create the user account in Firebase Authentication
@@ -303,8 +303,7 @@ if (signupForm) {
             const usersRef = collection(db, 'Users');
             addDoc(usersRef, {
                 email: email,
-                password: password,
-                role: role,
+                password: password
             }).then(() => {
                 console.log('User added to Firestore');
             }).catch((error) => {
