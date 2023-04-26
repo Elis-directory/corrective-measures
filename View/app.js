@@ -1,3 +1,6 @@
+
+
+
 // Sidebar toggle function
 const sidebarToggle = () => {
 	document.body.classList.toggle('sidebar-open')
@@ -99,6 +102,8 @@ function showActivityContent() {
  
   mainContent.innerHTML = '<h1>User Activity</h1><p>This is the User Activity content.</p>';
 }
+
+
 
 
 

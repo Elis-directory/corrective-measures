@@ -1,16 +1,17 @@
-
 <!--
   - Program Name: signup.html (main webpage)
-  - Author(s):       Eliran Chomoshe, Trevor, Ivanna, Kyle
-  - Notes:     	 Website's Homepage Structure, Websites Utilizes Bootstrap 5 Framework
-    - * Work on ....
-    - * Work on ....
+  - Author(s):       Trevor Kvanvig, Eliran Chomoshe, Ivanna Vazquez, Kyle McCollum
+  - Notes:     	 Website's 'Sign up' page Structure, Websites Utilizes Bootstrap 5 Framework
+    - * Work on .... Success message/ fail message
+    - * Work on .... Verification email ?
+    - * Work on .... Footer
   -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,7 +61,7 @@
     </header>
 
 
-	<main> 
+	
 
 
 <div class="form-signin w-100 m-auto signup-image">
@@ -84,6 +85,14 @@
         <label for="signup-password" style="width: 120px; margin-right: 10px;">Password:</label>
         <input type="password" id="signup-password" name="password" required>
     </div>
+ <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 10px;">
+        <label for="signup-account-type" style="width: 120px; margin-right: 10px;">Account Type:</label>
+  <select name="type" id="signup-account-type">
+    <option value="Admin" ">Admin</option>
+    <option value="User">User</option>
+  </select>
+    </div>
+
 
     <!--REMOVED CONFIRM PASSWORD FOR TESTING-->
     <!--<div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 10px;">
@@ -187,4 +196,11 @@
     <!-- Bootstrap JS CDN-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <script type="module" src="/Controller/controller.js"></script>
+<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+
+<!-- Add Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"></script>
+
   </body>
