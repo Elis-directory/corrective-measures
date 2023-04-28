@@ -136,7 +136,7 @@ function addBoard(id) {
         // Add the buttons to the new board
         let HTML = `
                 <div class="container" style="margin: auto;">
-                <ul class="collapsible z-depth-0 tickets" style="border: none;" id="TicketList" data-collapsible="accordion">
+                <ul id="TicketList" class="ticket-list">
                     <!-- TICKETS FROM DATABASE GET PUT IN MODULE AND STORED HERE -->
                 </ul>
                 <!-- Add Ticket Button -->
@@ -192,7 +192,7 @@ function addBoard(id) {
 
         const ticketList = newBoard.querySelector('#TicketList')
         viewTicketList(ticketList, id)
-        M.Collapsible.init(ticketList);
+        
 
 
 
@@ -416,26 +416,36 @@ function viewTicketList(placeToAdd, id) {
         .catch(err => {
             console.log(err.message)
             setupTickets([]);
-        })
+    })
+    const ticketInfo = document.getElementById('ticket-field');
+    
 
     //setup tickets
     const setupTickets = (data) => { // get snapshot
         if (data.length != 0) {
-            let html = ""; // plank template to append html
+            let html = ""; // blank template to append html
+            let ticketHTML ="";
             data.forEach(doc => { // go through snapshot. return each doc as a element
-                const tickets = doc // det data from doc
+                const ticket = doc // det data from doc
                 // create html code with elements from data base
                 const li = `              
                 <li>
-                    <div class="center-align collapsible-header grey lighten-4 ">Priority: ${tickets.priority} ${tickets.title}</div>
-                    <div class="collapsible-body white">${tickets.description}</div>
+                    <div><button class="view-ticket-details modal-trigger modal-btn"
+                    data-target="modal-Ticket">${ticket.title}</button></div>
+                    
                 </li>
                 `;
-                html += li // append each data
+                const ticketItems =`<h6>${ticket.title}</h6> </br> 
+                <h6>${ticket.priority}</h6> </br> 
+                <h6>${ticket.description}</h6>
+                `;
+                html += li; // append each data
+                ticketHTML += ticketItems
+                //<div class="collapsible-body white">${tickets.description}</div>
             });
+            ticketInfo.innerHTML = ticketHTML;
             placeToAdd.innerHTML = html; // add to Html file from abve defined place
-
-
+            
         } else {
             placeToAdd.innerHTML = '<h5 class ="center-align">THERE ARE NO TICKETS</h5>'
         }

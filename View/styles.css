@@ -599,7 +599,28 @@ body.sidebar-open #sidebar {
 	height: 18rem;
 }
 
+.view-ticket-details{
+	background-color: #3e5ed0;
+	border: none;
+	color: white;
+	width: 80%;
+	height: 8vh;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	border-radius: 25px;
+}
 
+.view-ticket-details:hover {
+	background-color: #2d469f; 
+  	color: white;
+}
+
+.ticket-list {
+	background-color: #8c8c8c;
+	border-radius: 25px;
+}
 /*************************************************** Misc. **************************************************/
 
 .clearfix {
@@ -672,6 +693,7 @@ padding-bottom: 6rem;
     overflow-y: auto;
     text-align: center;
     padding-top: 30px;
+	border-radius: 20px;
     
 }
 
@@ -687,5 +709,7 @@ padding-bottom: 6rem;
 
 .btn:hover {
     background-color: lightgrey;
-  }
+}
+
+
 
