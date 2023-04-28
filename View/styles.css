@@ -4,7 +4,8 @@
 	--gray-tint-30: #63666E;
 	--gray-tint-50: #909298;
 	--gray-tint-80: #D2D3D6;
-	--gray-alpha-80: rgb(32 36 48 / .8); /* CSS Colors Level 4 */
+	--gray-alpha-80: rgb(32 36 48 / .8);
+	/* CSS Colors Level 4 */
 	--gray-tint-90: #E9E9EA;
 
 	--white-base: #fff;
@@ -372,9 +373,9 @@ body.sidebar-open #sidebar {
 
 
 .c-font {
-  font-family: "Montserrat";
-  font-size: 1.2rem;
-  font-weight: 100;
+	font-family: "Montserrat";
+	font-size: 1.2rem;
+	font-weight: 100;
 }
 
 .txt-white {
@@ -389,19 +390,19 @@ body.sidebar-open #sidebar {
 
 
 .font-3 {
-  	font-size: 3.5rem;
+	font-size: 3.5rem;
 }
 
 /*************************************************** Positioning **************************************************/
 
 
-.p-width{
+.p-width {
 	display: block;
-  	margin-left: auto;
-  	margin-right: auto;
+	margin-left: auto;
+	margin-right: auto;
 	margin-top: 2%;
 	letter-spacing: 0.1em;
-	width:75%;
+	width: 75%;
 }
 
 
@@ -453,41 +454,41 @@ body.sidebar-open #sidebar {
 
 
 .bg1-image {
-  	background-image: url("images/marble.jpg");
-  	background-size: cover;
-  	background-position: center;
-  	width:100%;
+	background-image: url("images/marble.jpg");
+	background-size: cover;
+	background-position: center;
+	width: 100%;
 }
 
 .bg2-image {
-  	background-image: url("images/log.jpg");
-  	background-size: cover;
-  	background-position: center;
-  	width:100%;
-  	height: 34rem;
+	background-image: url("images/log.jpg");
+	background-size: cover;
+	background-position: center;
+	width: 100%;
+	height: 34rem;
 }
 
 
 .bg3-image {
-  	background-image: url("images/bg1.jpg");
-  	background-size: cover;
-  	background-position: center;
-  	width:100%;
+	background-image: url("images/bg1.jpg");
+	background-size: cover;
+	background-position: center;
+	width: 100%;
 }
 
 .bg4-image {
-  	background-image: url("images/p2.jpg");
-  	background-size: cover;
-  	background-position: center;
-  	width:100%;
+	background-image: url("images/p2.jpg");
+	background-size: cover;
+	background-position: center;
+	width: 100%;
 	height: 40rem;
 }
 
 
 .signup-image {
-  	background-image: url("./images/p1.jpg");
-  	background-size: cover;
-  	background-position: center;
+	background-image: url("./images/p1.jpg");
+	background-size: cover;
+	background-position: center;
 	height: 48rem;
 }
 
@@ -496,20 +497,22 @@ body.sidebar-open #sidebar {
 
 .nav-scroller .nav {
 	display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
+	flex-wrap: nowrap;
+	padding-bottom: 1rem;
+	margin-top: -1px;
+	overflow-x: auto;
+	text-align: center;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
 }
 
 .navbar-dark .navbar-brand,
 .navbar-dark .navbar-nav .nav-link {
 	color: #FFFFFF;
-	font-size: 1.2rem; /* Increase this value to make the font larger */
-	padding-top: 20px; /* Adjust this value to center the text vertically */
+	font-size: 1.2rem;
+	/* Increase this value to make the font larger */
+	padding-top: 20px;
+	/* Adjust this value to center the text vertically */
 	padding-bottom: 20px;
 }
 
@@ -524,7 +527,8 @@ body.sidebar-open #sidebar {
 
 
 .navbar {
-	height: 5rem; /* Adjust this value to increase the height of the navbar */
+	height: 5rem;
+	/* Adjust this value to increase the height of the navbar */
 }
 
 /*************************************************** Login **************************************************/
@@ -538,42 +542,43 @@ body.sidebar-open #sidebar {
 /*************************************************** Carousel **************************************************/
 
 
-.carousel-control-prev, .carousel-control-next {
+.carousel-control-prev,
+.carousel-control-next {
 	width: 6%;
 }
 
-.carousel-control-prev-icon, .carousel-control-next-icon {
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
 	width: 28px;
 	height: 28px;
 }
 
 
 .carousel1 {
-  	background-image: url("./images/carousel1.jpg");
-  	background-size: cover;
-  	background-position: center;
+	background-image: url("./images/carousel1.jpg");
+	background-size: cover;
+	background-position: center;
 	height: 40rem;
 }
 
 .carousel2 {
-  	background-image: url("./images/network.png");
-  	background-size: cover;
+	background-image: url("./images/network.png");
+	background-size: cover;
 	background-position: center;
 	height: 40rem;
 }
 
 .carousel3 {
-  	background-image: url("./images/carousel2.jpg");
-  	background-size: cover;
-  	background-position: center;
+	background-image: url("./images/carousel2.jpg");
+	background-size: cover;
+	background-position: center;
 	height: 40rem;
 }
 
 
-.rounded-img-placement
-{
+.rounded-img-placement {
 	margin-top: 3rem;
-        width: 30rem; 
+	width: 30rem;
 	height: 28rem;
 }
 
@@ -586,20 +591,19 @@ body.sidebar-open #sidebar {
 
 }
 
-#cards 
-{
-	height:52rem;
+#cards {
+	height: 52rem;
 
 }
 
-.rounded-card-placement{
+.rounded-card-placement {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
-        width: 22rem; 
+	width: 22rem;
 	height: 18rem;
 }
 
-.view-ticket-details{
+.modalBtnStyle {
 	background-color: #3e5ed0;
 	border: none;
 	color: white;
@@ -610,17 +614,22 @@ body.sidebar-open #sidebar {
 	display: inline-block;
 	font-size: 16px;
 	border-radius: 25px;
+	margin: 0;
+	
+	
 }
 
-.view-ticket-details:hover {
-	background-color: #2d469f; 
-  	color: white;
+.modalBtnStyle:hover {
+	background-color: #2d469f;
+	color: white;
+	
 }
 
 .ticket-list {
 	background-color: #8c8c8c;
 	border-radius: 25px;
 }
+
 /*************************************************** Misc. **************************************************/
 
 .clearfix {
@@ -628,7 +637,7 @@ body.sidebar-open #sidebar {
 }
 
 .bdy1 {
-	float:left;
+	float: left;
 }
 
 .bdy2 {
@@ -643,73 +652,68 @@ h1 {
 
 
 .pt {
-padding-top: 6rem;
-padding-bottom: 6rem;
+	padding-top: 6rem;
+	padding-bottom: 6rem;
 
 
 }
 
 
 .pt2 {
-  padding-top: 8rem;
-  padding-bottom: .5rem;
+	padding-top: 8rem;
+	padding-bottom: .5rem;
 }
 
-.logo-dim
-{
-        width: 33%; 
+.logo-dim {
+	width: 33%;
 	height: 33%;
 	margin-bottom: 1rem;
 }
 
-.myModalStyling{
-    padding: 0;
-    background-color: transparent;
-    box-shadow: none;
-    
+.myModalStyling {
+	padding: 0;
+	background-color: transparent;
+	height: auto;
+	padding: 0%;
 }
 
 .board-container {
-    max-height: 800px;
-    border: 1px solid black;
-    background-color: black;
-    display: flex;
-    overflow-x: auto;
+	max-height: 800px;
+	border: 1px solid black;
+	background-color: black;
+	display: flex;
+	overflow-x: auto;
 }
 
 .board-container::-webkit-scrollbar {
-    width: 2;
+	width: 2;
 }
 
 .board {
-    min-width: 500px;
-    height: 700px;
-    margin: 20px;
-    line-height: 100px;
-    background-color: ghostwhite;
-    border: 1px solid black;
-    position: relative;
-    max-height: 800px;
-    overflow-y: auto;
-    text-align: center;
-    padding-top: 30px;
+	min-width: 500px;
+	height: 700px;
+	margin: 20px;
+	line-height: 100px;
+	background-color: ghostwhite;
+	border: 1px solid black;
+	position: relative;
+	max-height: 800px;
+	overflow-y: auto;
+	text-align: center;
+	padding-top: 30px;
 	border-radius: 20px;
-    
+
 }
 
-.add-board-btn{
-    margin-bottom: 15px;
+.add-board-btn {
+	margin-bottom: 15px;
 }
 
-.btn
-{
+.btn {
 
-    background-color: black;  
+	background-color: black;
 }
 
 .btn:hover {
-    background-color: lightgrey;
+	background-color: lightgrey;
 }
-
-
-

@@ -84,11 +84,11 @@ onSnapshot(q, (querySnapshot) => {
 
 function createBoardsFromDB(qSH) {
     qSH.forEach((doc) => {
-        addBoard(doc.id)
+        const data = doc.data(); // retrieve plain JavaScript object representing the document
+        console.log('boardTitle', data.bTitle)
+        addBoard(doc.id, data.bTitle)
         console.log('Board loaded, board ID =>', doc.id)
-
     })
-
 }
 
 
@@ -113,7 +113,13 @@ function addNewBoard() {
     }).then((docRef) => {
         console.log("Board created with ID: ", docRef.id);
         // create new boad on site with id created from firestore
-        addBoard(docRef.id);
+        const newBoardRef = doc(db, `Boards/${docRef.id}`);
+        getDoc(newBoardRef).then((doc) => {
+            const boardTitle = doc.data().bTitle;
+            console.log("boardTitle", boardTitle);
+            // create new board on site with id created from Firestore
+            addBoard(docRef.id, boardTitle);
+        });
     }).catch((error) => {
         console.error("Error adding document: ", error);
     });
@@ -121,7 +127,7 @@ function addNewBoard() {
 
 
 
-function addBoard(id) {
+function addBoard(id, boardTitle) {
     console.log('Boards in Database', BoardsInDatabase)
     console.log('Boards Created in Window', numOfBoards)
     numOfBoards++
@@ -138,15 +144,13 @@ function addBoard(id) {
         // Add the buttons to the new board
         let HTML = `
                 <div class="container" style="margin: auto;">
+                <h2 class="board-title">${boardTitle}</h2>
                 <ul id="TicketList" class="ticket-list">
                     <!-- TICKETS FROM DATABASE GET PUT IN MODULE AND STORED HERE -->
                 </ul>
                 <!-- Add Ticket Button -->
                 <button class="btn btn-sm btn-outline-secondary modal-trigger modal-btn"
                     data-target="modal-addTicket">Add Ticket</button>
-                <!-- Delete Ticket Button -->
-                <button class="btn btn-sm btn-outline-secondary modal-trigger modal-btn" 
-                    data-target="modal-deleteTicket">Delete Ticket</button>
                 <!-- Delete Board Button -->
                     <button class="btn btn-sm btn-outline-secondary delete-board-btn" 
                     id="delete-board-btn">DELETE BOARD</button>
@@ -185,7 +189,7 @@ function addBoard(id) {
             console.log('board id', boardRef);
             const getInfo = document.getElementById('addTicket-form');
             const modal = document.getElementById('modal-addTicket')
-            
+
             createNewTicket(modal, getInfo, boardId);
         });
 
@@ -252,24 +256,26 @@ function viewTicketList(placeToAdd, BoardId) {
 
                 // ticket items holds what is in the modal
                 const ticketItems = `
-                    <div class="modal-content">
-                        <h4>Ticket Info</h4>
-                        <br />
-                        <div class="ticket-field" id="ticket-field">
-                            <h6>${ticket.title}</h6> 
-                            </br> 
-                            <h6>${ticket.priority}</h6> 
-                            </br> 
-                            <h6>${ticket.description}</h6>
-                        </div>
-                    </div>
+                <div class="modal-content">
+                <h4>Ticket Info</h4>
+                <br />
+                <div class="ticket-field" id="ticket-field">
+                    <h6>${ticket.title}</h6> 
+                    </br> 
+                    <h6>${ticket.priority}</h6> 
+                    </br> 
+                    <h6>${ticket.description}</h6>
+                    <!-- Delete Ticket Button -->
+                    <button class="btn btn-sm btn-outline-secondary delete-ticket" data-ticket-id="${ticket.id}">Delete Ticket</button>
+                </div>
+                </div>
                 `;
 
                 // li holds the ticket title and displays them as buttons in dashboard
                 const li = `              
                     <li>
                         <div>
-                            <button class="view-ticket-details modal-trigger modal-btn"
+                            <button class="modalBtnStyle modal-trigger modal-btn"
                                 data-target="${modalId}">${ticket.title}
                             </button>
                         </div>
@@ -280,7 +286,7 @@ function viewTicketList(placeToAdd, BoardId) {
                 html += li;
 
                 // create modal and place ticket info in modal code with accociated id
-                modals.innerHTML += `<div id="${modalId}" class="modal">${ticketItems}</div>`;
+                modals.innerHTML += `<div id="${modalId}" class="modal myModalStyling">${ticketItems}</div>`;
             });
 
             // put list of ticket buttons in correct board
@@ -288,6 +294,28 @@ function viewTicketList(placeToAdd, BoardId) {
         } else {
             placeToAdd.innerHTML = '<h5 class="center-align">THERE ARE NO TICKETS</h5>';
         }
+
+        const deleteTicketBtns = document.querySelectorAll('.delete-ticket');
+        deleteTicketBtns.forEach((button) => {
+            console.log("button found")
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                console.log("clicked")
+                // get the ID of the ticket to delete
+                const ticketId = button.dataset.ticketId;
+                // delete the ticket from the database
+                const ticketRef = doc(db, `Boards/${BoardId}/Tickets/${ticketId}`);
+                deleteDoc(ticketRef).then(() => {
+                    console.log(`Ticket ${ticketId} deleted successfully`);
+                }).catch((error) => {
+                    console.error("Error deleting document: ", error);
+                });
+                // close the modal
+                const modal = button.closest('.modal');
+                const modalInstance = M.Modal.getInstance(modal);
+                modalInstance.close();
+            });
+        });
 
         document.body.appendChild(modals);
         // initialize modals after they are added to the DOM
