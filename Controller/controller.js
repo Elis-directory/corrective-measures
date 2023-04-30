@@ -324,6 +324,8 @@ function viewTicketList(placeToAdd, BoardId) {
 }
 
 
+//================================================================================================
+
 
 //================================================================================================
 
@@ -387,6 +389,7 @@ function createNewTicket(modal, getInfo, boardId) {
     });
 }
 //================================================================================================
+
 const createTeams = document.querySelector('#create-team');
 
 if (createTeams) {
@@ -407,6 +410,7 @@ function createTeam() {
         console.error('Error adding team to Firestore: ', error);
     });
 }
+
 
 
 
@@ -449,6 +453,7 @@ function creatNewAccount() {
 
         signupForm.reset(); // reset signup form delared above
         // window.location.href = "dashboard.html";
+
 
     }).catch((error) => {
 
