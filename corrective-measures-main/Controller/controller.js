@@ -61,41 +61,39 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 //================================================================================================
+//instanciate Pop Up Modals
+document.addEventListener('DOMContentLoaded', function () {
+    // get all modals
+    var elems = document.querySelectorAll('.modal');
+    //init them
+    M.Modal.init(elems)
+});
+
 // as soon as page loads get data from database and create boards
-
-
 let numOfBoards = 0;
 let BoardsInDatabase = 0;
 
+//When a board gets updated
+const colRef = collection(db, 'Boards')
+const q = query(colRef, orderBy("bTitle"));
+onSnapshot(q, (querySnapshot) => {
+    BoardsInDatabase = querySnapshot.size;
+    console.log(BoardsInDatabase)
+    createBoardsFromDB(querySnapshot)
+})
 
-window.onload = function () {
-    createBoardsFromDB()
-
-};
-
-
-
-function createBoardsFromDB() {
-
-    const colRef = collection(db, 'Boards')
-    const q = query(colRef, orderBy("bTitle"));
-
-    onSnapshot(q, (querySnapshot) => {
-        BoardsInDatabase = querySnapshot.size;
-        console.log(BoardsInDatabase)
-        querySnapshot.forEach((doc) => {
-            addBoard(doc.id)
-            console.log('Board loaded, board ID =>', doc.id)
-
-        })
-
+function createBoardsFromDB(qSH) {
+    qSH.forEach((doc) => {
+        const data = doc.data(); // retrieve plain JavaScript object representing the document
+        console.log('boardTitle', data.bTitle)
+        addBoard(doc.id, data.bTitle)
+        console.log('Board loaded, board ID =>', doc.id)
     })
-
 }
 
 
 const addBoardBtn = document.getElementById("add-board-btn")
-if (addBoardBtn){
+if (addBoardBtn) {
     addBoardBtn.addEventListener("click", function (e) {
         console.log('click add board')
         e.preventDefault(); // stops default action
@@ -106,56 +104,65 @@ if (addBoardBtn){
 
 
 function addNewBoard() {
-
+    // get refrence to all boards on database
     const boardRef = collection(db, "Boards");
+    // add board to database
     addDoc(boardRef, {
+        // make the board title 'Board' and current number of bords
         bTitle: `Board ${numOfBoards}`,
-    })
-        .then((docRef) => {
-            console.log("Board created with ID: ", docRef.id);
-            addBoard(docRef.id);
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
+    }).then((docRef) => {
+        console.log("Board created with ID: ", docRef.id);
+        // create new boad on site with id created from firestore
+        const newBoardRef = doc(db, `Boards/${docRef.id}`);
+        getDoc(newBoardRef).then((doc) => {
+            const boardTitle = doc.data().bTitle;
+            console.log("boardTitle", boardTitle);
+            // create new board on site with id created from Firestore
+            addBoard(docRef.id, boardTitle);
         });
+    }).catch((error) => {
+        console.error("Error adding document: ", error);
+    });
 }
 
 
 
-function addBoard(id) {
+function addBoard(id, boardTitle) {
     console.log('Boards in Database', BoardsInDatabase)
     console.log('Boards Created in Window', numOfBoards)
     numOfBoards++
     if (numOfBoards <= BoardsInDatabase) {
         // Create a new board element
-        
 
+        //create new board div
         const newBoard = document.createElement('div');
+        //give it class of board
         newBoard.classList.add('board');
 
 
 
         // Add the buttons to the new board
         let HTML = `
-    <div class="container" style="margin: auto;">
-      <ul class="collapsible z-depth-0 tickets" style="border: none;" id="TicketList" data-collapsible="accordion">
-        <!-- TICKETS FROM DATABASE GET PUT IN MODULE AND STORED HERE -->
-      </ul>
-      <!-- Add Ticket Button -->
-      <button class="btn btn-sm btn-outline-secondary modal-trigger modal-btn"
-        data-target="modal-addTicket">Add Ticket</button>
-      <!-- Delete Ticket Button -->
-      <!--<button class="btn btn-sm btn-outline-secondary modal-trigger modal-btn" 
-        data-target="modal-deleteTicket">Delete Ticket</button>-->
-      <!-- Delete Board Button -->
-        <button class="btn btn-sm btn-outline-secondary delete-board-btn" 
-        id="delete-board-btn">DELETE BOARD</button>
-    </div>
-  `;
+                <div class="container" style="margin: auto;">
+                <h2 class="board-title">${boardTitle}</h2>
+                <ul id="TicketList" class="ticket-list">
+                    <!-- TICKETS FROM DATABASE GET PUT IN MODULE AND STORED HERE -->
+                </ul>
+                <!-- Add Ticket Button -->
+                <button class="btn btn-sm btn-outline-secondary modal-trigger modal-btn"
+                    data-target="modal-addTicket">Add Ticket</button>
+                <!-- Delete Board Button -->
+                    <button class="btn btn-sm btn-outline-secondary delete-board-btn" 
+                    id="delete-board-btn">DELETE BOARD</button>
+                </div>
+            `;
+        // place html inside of new board
         newBoard.innerHTML = HTML
         // Add the new board element to the board container
         const boardContainer = document.getElementById('board-container');
+        // place new board at the end of board container
         boardContainer.appendChild(newBoard);
+        // board id gets stored as the id inputted to fuction
         newBoard.dataset.boardId = id;
 
 
@@ -181,7 +188,9 @@ function addBoard(id) {
             const boardRef = doc(db, 'Boards', boardId);
             console.log('board id', boardRef);
             const getInfo = document.getElementById('addTicket-form');
-            createNewTicket(getInfo, boardId);
+            const modal = document.getElementById('modal-addTicket')
+
+            createNewTicket(modal, getInfo, boardId);
         });
 
         // deleteTicketBtn.addEventListener('click', function (event) {
@@ -192,35 +201,142 @@ function addBoard(id) {
         //     addTicketModal.style.display = "block";
         // });
 
-
-
         const ticketList = newBoard.querySelector('#TicketList')
         viewTicketList(ticketList, id)
-        M.Collapsible.init(ticketList);
-        
-
-
     }
-
-
 }
 
 function deleteBoard(board, elem) {
+    // remove board from html
     elem.remove();
+    // remove board from firebase
     deleteDoc(board);
 }
+//===========================================Show Tickets On Site===================================
+//placeToAdd: html in board to display ticket list in
+//Board ID: ID of board in firebase to get tickets from
+function viewTicketList(placeToAdd, BoardId) {
+    // create reference to ticket list associated with the board
+    const colRef = collection(db, 'Boards/' + BoardId + '/Tickets')
 
+    // order tickets by priority
+    const q = query(colRef, orderBy("priority"));
+
+    // get collection data
+    getDocs(q)
+        .then((snapshot) => {
+            // set tickets to be an empty list
+            let tickets = []
+            //for eatch ticket pus it into ticket list
+            snapshot.docs.forEach(doc => {
+                tickets.push({ ...doc.data(), id: doc.id })
+            });
+            // call setupTickets function with created list of sorted tickets
+            setupTickets(tickets);
+        })
+        .catch(err => {
+            // else diaplay error
+            console.log(err.message)
+            setupTickets([]);
+        })
+
+    const setupTickets = (data) => {
+        // create an empty div to store created modals for eatch ticket HTML
+        const modals = document.createElement('div');
+
+        // if there are tickets in the list
+        if (data.length != 0) {
+            // placeholder for html code
+            let html = "";
+
+            // go through each ticket
+            data.forEach(ticket => {
+                // make modal id to link to current ticket
+                const modalId = "modal-" + ticket.id;
+
+                // ticket items holds what is in the modal
+                const ticketItems = `
+                <div class="modal-content">
+                <h4>Ticket Info</h4>
+                <br />
+                <div class="ticket-field" id="ticket-field">
+                    <h6>${ticket.title}</h6> 
+                    </br> 
+                    <h6>${ticket.priority}</h6> 
+                    </br> 
+                    <h6>${ticket.description}</h6>
+                    <!-- Delete Ticket Button -->
+                    <button class="btn btn-sm btn-outline-secondary delete-ticket" data-ticket-id="${ticket.id}">Delete Ticket</button>
+                </div>
+                </div>
+                `;
+
+                // li holds the ticket title and displays them as buttons in dashboard
+                const li = `              
+                    <li>
+                        <div>
+                            <button class="modalBtnStyle modal-trigger modal-btn"
+                                data-target="${modalId}">${ticket.title}
+                            </button>
+                        </div>
+                    </li>
+                `;
+
+                // append ticket list into html
+                html += li;
+
+                // create modal and place ticket info in modal code with accociated id
+                modals.innerHTML += `<div id="${modalId}" class="modal myModalStyling">${ticketItems}</div>`;
+            });
+
+            // put list of ticket buttons in correct board
+            placeToAdd.innerHTML = html;
+        } else {
+            placeToAdd.innerHTML = '<h5 class="center-align">THERE ARE NO TICKETS</h5>';
+        }
+
+        const deleteTicketBtns = document.querySelectorAll('.delete-ticket');
+        deleteTicketBtns.forEach((button) => {
+            console.log("button found")
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                console.log("clicked")
+                // get the ID of the ticket to delete
+                const ticketId = button.dataset.ticketId;
+                // delete the ticket from the database
+                const ticketRef = doc(db, `Boards/${BoardId}/Tickets/${ticketId}`);
+                deleteDoc(ticketRef).then(() => {
+                    console.log(`Ticket ${ticketId} deleted successfully`);
+                }).catch((error) => {
+                    console.error("Error deleting document: ", error);
+                });
+                // close the modal
+                const modal = button.closest('.modal');
+                const modalInstance = M.Modal.getInstance(modal);
+                modalInstance.close();
+            });
+        });
+
+        document.body.appendChild(modals);
+        // initialize modals after they are added to the DOM
+        const modalInstances = M.Modal.init(document.querySelectorAll('.modal'), {});
+    }
+}
+
+
+
+//================================================================================================
 
 
 //===========================================User Class========================================
 
 
 class User {
-    constructor (userName, email, password, role) {
+    constructor(userName, email, password, role) {
         this.userName = userName;
         this.email = email;
         this.password = password;
-	this.role = role;
+        this.role = role;
     }
     toString() {
         return this.name;
@@ -234,8 +350,8 @@ const userConverter = {
             name: user.userName,
             email: user.email,
             password: user.password,
-	    role: user.role
-            };
+            role: user.role
+        };
     },
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
@@ -245,7 +361,7 @@ const userConverter = {
 
 
 //===========================================Create Ticket========================================
-function createNewTicket(getInfo, boardId) {
+function createNewTicket(modal, getInfo, boardId) {
 
     const boardRef = doc(db, "Boards", boardId);
 
@@ -263,7 +379,6 @@ function createNewTicket(getInfo, boardId) {
             .then(() => {
                 console.log("Ticket added to Firestore!");
                 getInfo.reset()
-                const modal = getInfo
                 M.Modal.getInstance(modal).close(); // close the modal
             })
             .catch((error) => {
@@ -271,11 +386,6 @@ function createNewTicket(getInfo, boardId) {
             });
     });
 }
-
-
-
-
-
 //================================================================================================
 const createTeams = document.querySelector('#create-team');
 
@@ -302,54 +412,57 @@ function createTeam() {
 
 
 
-//=======================ADD NEW USER AFTER SUBMIT BUTTON IS PRESSED==============================
-//####function creatNewAccount(username, password, email)####
+
+//=======================Create Account==============================
 const signupForm = document.querySelector('#signup-form'); // get entire signup form and its contents
-if (signupForm) {
+if (signupForm) { // if signup form exists on the page
     signupForm.addEventListener('submit', (e) => { // once form is submitted with button press
         e.preventDefault(); // prevents default action
-
-        //get user info
-        const email = signupForm['signup-email'].value;
-        const password = signupForm['signup-password'].value;
-       // const role = signupForm['signup-account-type'].value;
-        console.log(email, password);
-
-        // Create the user account in Firebase Authentication
-        createUserWithEmailAndPassword(auth, email, password).then((cred) => {
-            console.log('user just signed up: ', cred); // console will display user that just signed in if worked correctly
-
-            // Add the user's information to Firestore with a unique ID
-            const usersRef = collection(db, 'Users');
-            addDoc(usersRef, {
-                email: email,
-                password: password
-            }).then(() => {
-                console.log('User added to Firestore');
-            }).catch((error) => {
-                console.error('Error adding user to Firestore: ', error);
-            });
-
-            signupForm.reset(); // reset signup form delared above
-            // window.location.href = "dashboard.html";
-
-        }).catch((error) => {
-
-            // display errors
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode)
-            console.log(errorMessage)
-
-            signupForm.reset(); // reset signup form delared above
-            // ..
-        });
+        creatNewAccount() // creates account on firebase
 
     })
 }
 
+function creatNewAccount() {
+    //get user info
+    const email = signupForm['signup-email'].value;
+    const password = signupForm['signup-password'].value;
+    // const role = signupForm['signup-account-type'].value;
+    console.log(email, password);
 
+    // Create the user account in Firebase Authentication
+    createUserWithEmailAndPassword(auth, email, password).then((cred) => {
+        console.log('user just signed up: ', cred); // console will display user that just signed in if worked correctly
 
+        // Add the user's information to Firestore with a unique ID
+        const usersRef = collection(db, 'Users');
+
+        addDoc(usersRef, {
+            // Add user given what was submitted from modal
+            email: email,
+            password: password
+        }).then(() => {
+            console.log('User added to Firestore');
+        }).catch((error) => {
+            console.error('Error adding user to Firestore: ', error);
+        });
+
+        signupForm.reset(); // reset signup form delared above
+        // window.location.href = "dashboard.html";
+
+    }).catch((error) => {
+
+        // display errors
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode)
+        console.log(errorMessage)
+
+        signupForm.reset(); // reset signup form delared above
+        // ..
+    });
+
+}
 //================================================================================================
 
 //=======================CHECK TO SEE IF USER IS SIGNED INTO SITE OR NOT==========================
@@ -372,106 +485,60 @@ const logout = document.querySelector('#logout'); // get logout button from nav 
 if (logout) {
     logout.addEventListener('click', (e) => {
         e.preventDefault(); // stops default action
-
         signOut(auth).then(() => {
-
         })
     })
 }
-
-
 //================================================================================================
 
 //===========================================SIGN IN==============================================
 // function authenticateCredentials(username, password);
 //signin
-const loginForm = document.querySelector('#login-form')
-if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
+const loginForm = document.querySelector('#login-form') // refrence to login form
+if (loginForm) { // if login form exists on current page
+    loginForm.addEventListener('submit', (e) => { // when login form is submitted
         e.preventDefault();
 
-
+        // get info from login form
         const email = loginForm['login-email'].value;
         const password = loginForm['login-password'].value;
         console.log(email, password);
 
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                window.location.href = "dashboard.html"; // function directToDashboard();
-                console.log('user login: ', user);
-                loginForm.reset(); // reset signup form delared above
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-
-                loginForm.reset(); // reset signup form delared above
-            });
-
+        authenticateCredentials(email, password)
     })
 }
 
+function authenticateCredentials(email, password) {
+    // sign person in with inputted credentials
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            window.location.href = "dashboard.html"; // function directToDashboard();
+            console.log('user login: ', user);
+            loginForm.reset(); // reset signup form delared above
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            loginForm.reset(); // reset signup form delared above
+        });
+
+}
 //================================================================================================
 
-// function creatNewAccount(username, password, email)
+
 
 // function logoutUser(message);
 
-// function authenticateCredentials(username, password);
+
 
 // function directToDashboard();
 
 // function getUserDetails();
 
-//===========================================Show Tickets On Site===================================
 
-function viewTicketList(placeToAdd, id) {
-    // create refrence to collection
-    const colRef = collection(db, 'Boards/' + id + '/Tickets')
-    const q = query(colRef, orderBy("priority"));
-    // get collection data
-    getDocs(q) // getDocs returns a snapshot
-        .then((snapshot) => { // when a snapshot is recived
-            let tickets = []
-            snapshot.docs.forEach(doc => {
-                tickets.push({ ...doc.data(), id: doc.id })
-            });
-            setupTickets(tickets);
-        })
-        .catch(err => {
-            console.log(err.message)
-            setupTickets([]);
-        })
-
-    //setup tickets
-    const setupTickets = (data) => { // get snapshot
-        if (data.length != 0) {
-            let html = ""; // plank template to append html
-            data.forEach(doc => { // go through snapshot. return each doc as a element
-                const tickets = doc // det data from doc
-                // create html code with elements from data base
-                const li = `              
-        <li>
-            <div class="center-align collapsible-header grey lighten-4 ">Priority: ${tickets.priority} ${tickets.title}</div>
-            <div class="collapsible-body white">${tickets.description}</div>
-        </li>
-        `;
-                html += li // append each data
-            });
-            placeToAdd.innerHTML = html; // add to Html file from abve defined place
-
-
-        } else {
-            placeToAdd.innerHTML = '<h5 class ="center-align">THERE ARE NO TICKETS</h5>'
-        }
-    }
-}
-
-
-
-//================================================================================================
 // function viewTicketDetails(ticket);
 
 
@@ -520,7 +587,7 @@ DTicketForm.addEventListener('submit', (e) => {
 
 // function getTotalTimeSpent(ticket);
 
-// function registerUser();
+
 
 // function sendActivationEmail(); 
 

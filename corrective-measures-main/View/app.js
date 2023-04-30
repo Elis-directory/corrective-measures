@@ -1,6 +1,4 @@
 
-
-
 // Sidebar toggle function
 const sidebarToggle = () => {
 	document.body.classList.toggle('sidebar-open')
