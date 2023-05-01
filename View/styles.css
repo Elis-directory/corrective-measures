@@ -717,3 +717,15 @@ h1 {
 .btn:hover {
 	background-color: lightgrey;
 }
+
+.ticket-modal-title{
+	margin: auto;
+}
+
+.ticket-modal-components{
+	margin: auto;
+}
+
+.ticket-modal-btn{
+	margin: auto;
+}

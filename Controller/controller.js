@@ -247,16 +247,16 @@ function viewTicketList(placeToAdd, BoardId) {
                 // ticket items holds what is in the modal
                 const ticketItems = `
                   <div class="modal-content">
-                    <h4>Ticket Info</h4>
+                    <h4 class="ticket-modal-title">Ticket Info</h4>
                     <br />
                     <div class="ticket-field" id="ticket-field">
-                      <h6>${ticket.title}</h6> 
+                      <h6 class="ticket-modal-components">${ticket.title}</h6> 
                       </br> 
-                      <h6>${ticket.priority}</h6> 
+                      <h6 class="ticket-modal-components">${ticket.priority}</h6> 
                       </br> 
-                      <h6>${ticket.description}</h6>
+                      <h6 ticket-modal-components>${ticket.description}</h6>
                       <!-- Delete Ticket Button -->
-                      <button class="btn btn-sm btn-outline-secondary delete-ticket" data-ticket-id="${ticket.id}" id="delete-ticket">Delete Ticket</button>
+                      <button class="ticket-modal-btn btn btn-sm btn-outline-secondary delete-ticket" data-ticket-id="${ticket.id}" id="delete-ticket">Delete Ticket</button>
                     </div>
                   </div>
                 `;
