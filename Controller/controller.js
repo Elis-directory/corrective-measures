@@ -61,13 +61,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 //================================================================================================
-//instanciate Pop Up Modals
-document.addEventListener('DOMContentLoaded', function () {
-    // get all modals
-    var elems = document.querySelectorAll('.modal');
-    //init them
-    M.Modal.init(elems)
-});
+
 
 // as soon as page loads get data from database and create boards
 let numOfBoards = 0;
@@ -160,8 +154,12 @@ function addBoard(id, boardTitle) {
         newBoard.innerHTML = HTML
         // Add the new board element to the board container
         const boardContainer = document.getElementById('board-container');
+       
         // place new board at the end of board container
-        boardContainer.appendChild(newBoard);
+        if(boardContainer){
+          boardContainer.appendChild(newBoard);  
+        }
+        
         // board id gets stored as the id inputted to fuction
         newBoard.dataset.boardId = id;
 
@@ -192,14 +190,6 @@ function addBoard(id, boardTitle) {
 
             createNewTicket(modal, getInfo, boardId);
         });
-
-        // deleteTicketBtn.addEventListener('click', function (event) {
-        //     event.preventDefault();
-        //     // get the modal element by its id
-        //     const addTicketModal = document.getElementById("modal-deleteTicket");
-        //     // set the display property to block to show the modal
-        //     addTicketModal.style.display = "block";
-        // });
 
         const ticketList = newBoard.querySelector('#TicketList')
         viewTicketList(ticketList, id)
@@ -241,7 +231,7 @@ function viewTicketList(placeToAdd, BoardId) {
         })
 
     const setupTickets = (data) => {
-        // create an empty div to store created modals for eatch ticket HTML
+        // create an empty div to store created modals for each ticket HTML
         const modals = document.createElement('div');
 
         // if there are tickets in the list
@@ -256,71 +246,78 @@ function viewTicketList(placeToAdd, BoardId) {
 
                 // ticket items holds what is in the modal
                 const ticketItems = `
-                <div class="modal-content">
-                <h4>Ticket Info</h4>
-                <br />
-                <div class="ticket-field" id="ticket-field">
-                    <h6>${ticket.title}</h6> 
-                    </br> 
-                    <h6>${ticket.priority}</h6> 
-                    </br> 
-                    <h6>${ticket.description}</h6>
-                    <!-- Delete Ticket Button -->
-                    <button class="btn btn-sm btn-outline-secondary delete-ticket" data-ticket-id="${ticket.id}">Delete Ticket</button>
-                </div>
-                </div>
+                  <div class="modal-content">
+                    <h4>Ticket Info</h4>
+                    <br />
+                    <div class="ticket-field" id="ticket-field">
+                      <h6>${ticket.title}</h6> 
+                      </br> 
+                      <h6>${ticket.priority}</h6> 
+                      </br> 
+                      <h6>${ticket.description}</h6>
+                      <!-- Delete Ticket Button -->
+                      <button class="btn btn-sm btn-outline-secondary delete-ticket" data-ticket-id="${ticket.id}" id="delete-ticket">Delete Ticket</button>
+                    </div>
+                  </div>
                 `;
 
                 // li holds the ticket title and displays them as buttons in dashboard
                 const li = `              
-                    <li>
-                        <div>
-                            <button class="modalBtnStyle modal-trigger modal-btn"
-                                data-target="${modalId}">${ticket.title}
-                            </button>
-                        </div>
-                    </li>
+                  <li>
+                    <div>
+                      <button class="modalBtnStyle modal-trigger modal-btn"
+                        data-target="${modalId}">${ticket.title}
+                      </button>
+                    </div>
+                  </li>
                 `;
 
                 // append ticket list into html
                 html += li;
 
-                // create modal and place ticket info in modal code with accociated id
+                // create modal and place ticket info in modal code with associated id
                 modals.innerHTML += `<div id="${modalId}" class="modal myModalStyling">${ticketItems}</div>`;
+                document.body.appendChild(modals);
+                // initialize modals after they are added to the DOM
+                const modalInstances = M.Modal.init(document.querySelectorAll('.modal'), {});
+
+                const deleteTicketBtns = document.querySelectorAll('.delete-ticket');
+                deleteTicketBtns.forEach((button) => {
+                    button.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        // get the ID of the ticket to delete
+                        const ticketId = button.dataset.ticketId;
+                        // delete the ticket from the database
+                        const ticketRef = doc(db, `Boards/${BoardId}/Tickets/${ticketId}`);
+                        deleteDoc(ticketRef).then(() => {
+                            console.log(`Ticket ${ticketId} deleted successfully`);
+                            // remove the modal from the DOM
+                            const modal = button.closest('.modal');
+                            modal.remove();
+                        }).catch((error) => {
+                            console.error("Error deleting document: ", error);
+                        });
+                        // close the modal
+                        const modal = button.closest('.modal');
+                        const modalInstance = M.Modal.getInstance(modal);
+                        modalInstance.close();
+                    });
+                });
             });
 
             // put list of ticket buttons in correct board
             placeToAdd.innerHTML = html;
-        } else {
+
+            // get all the delete ticket buttons and add event listeners to them
+            
+            
+        }else {
             placeToAdd.innerHTML = '<h5 class="center-align">THERE ARE NO TICKETS</h5>';
         }
 
-        const deleteTicketBtns = document.querySelectorAll('.delete-ticket');
-        deleteTicketBtns.forEach((button) => {
-            console.log("button found")
-            button.addEventListener('click', function (event) {
-                event.preventDefault();
-                console.log("clicked")
-                // get the ID of the ticket to delete
-                const ticketId = button.dataset.ticketId;
-                // delete the ticket from the database
-                const ticketRef = doc(db, `Boards/${BoardId}/Tickets/${ticketId}`);
-                deleteDoc(ticketRef).then(() => {
-                    console.log(`Ticket ${ticketId} deleted successfully`);
-                }).catch((error) => {
-                    console.error("Error deleting document: ", error);
-                });
-                // close the modal
-                const modal = button.closest('.modal');
-                const modalInstance = M.Modal.getInstance(modal);
-                modalInstance.close();
-            });
-        });
-
-        document.body.appendChild(modals);
-        // initialize modals after they are added to the DOM
-        const modalInstances = M.Modal.init(document.querySelectorAll('.modal'), {});
-    }
+        
+        
+    };
 }
 
 
@@ -403,12 +400,12 @@ function createTeam() {
         password: "password",
         // Add any other required fields here
     })
-    .then(() => {
-        console.log('Team added to Firestore');
-    })
-    .catch((error) => {
-        console.error('Error adding team to Firestore: ', error);
-    });
+        .then(() => {
+            console.log('Team added to Firestore');
+        })
+        .catch((error) => {
+            console.error('Error adding team to Firestore: ', error);
+        });
 }
 
 
@@ -554,8 +551,8 @@ function authenticateCredentials(email, password) {
 // function deleteTicket(ticket);
 const DTicketForm = document.querySelector('#deleteTicket-form')
 const DTicketModal = document.querySelector('#modal-deleteTicket')
-
-DTicketForm.addEventListener('submit', (e) => {
+if(DTicketForm){
+    DTicketForm.addEventListener('submit', (e) => {
     e.preventDefault() // stops page from refreshing
 
     const docRef = doc(db, 'Tickets', DTicketForm.id.value)
@@ -564,7 +561,9 @@ DTicketForm.addEventListener('submit', (e) => {
             DTicketForm.reset()
         })
 
-})
+    })
+}
+
 //================================================================================================
 // function changePassword(oldPassword, newPassword);
 

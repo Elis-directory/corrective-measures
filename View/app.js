@@ -1,3 +1,10 @@
+//instanciate Pop Up Modals
+document.addEventListener('DOMContentLoaded', function () {
+    // get all modals
+    var elems = document.querySelectorAll('.modal');
+    //init them
+    M.Modal.init(elems)
+});
 
 // Sidebar toggle function
 const sidebarToggle = () => {
