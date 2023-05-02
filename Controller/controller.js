@@ -133,12 +133,10 @@ function addBoard(id, boardTitle) {
         //give it class of board
         newBoard.classList.add('board');
 
-
-
         // Add the buttons to the new board
         let HTML = `
                 <div class="container" style="margin: auto;">
-                <h2 class="board-title">${boardTitle}</h2>
+                <textarea id="board-title" class="board-title">${boardTitle}</textarea>
                 <ul id="TicketList" class="ticket-list">
                     <!-- TICKETS FROM DATABASE GET PUT IN MODULE AND STORED HERE -->
                 </ul>
@@ -166,7 +164,7 @@ function addBoard(id, boardTitle) {
 
         // Add event listeners to the new buttons
         const addTicketBtn = newBoard.querySelector('.modal-btn[data-target="modal-addTicket"]');
-        const deleteTicketBtn = newBoard.querySelector('.modal-btn[data-target="modal-deleteTicket"]');
+        const boardT = newBoard.querySelector('#board-title');
         const deleteBoardBtn = newBoard.querySelector('.delete-board-btn');
 
         // Add an event listener to the delete button that removes the board from the DOM
@@ -190,6 +188,31 @@ function addBoard(id, boardTitle) {
 
             createNewTicket(modal, getInfo, boardId);
         });
+            
+        if (boardT) {
+            boardT.addEventListener("input", function() {
+              const titleRef = doc(db, 'Boards', id);
+              
+              getDoc(titleRef).then((docSnap) => {
+                if (docSnap.exists()) {
+                  setDoc(titleRef, {
+                    bTitle: boardT.value
+                  }).then(() => {
+                    console.log('Document successfully updated!');
+                  })
+                  .catch((error) => {
+                    console.error('Error updating document: ', error);
+                  });
+                } else {
+                  console.log("No such document!");
+                }
+              }).catch((error) => {
+                console.error("Error getting document:", error);
+              });
+            });
+          }
+        
+        
 
         const ticketList = newBoard.querySelector('#TicketList')
         viewTicketList(ticketList, id)
@@ -278,6 +301,7 @@ function viewTicketList(placeToAdd, BoardId) {
                 // create modal and place ticket info in modal code with associated id
                 modals.innerHTML += `<div id="${modalId}" class="modal myModalStyling">${ticketItems}</div>`;
                 document.body.appendChild(modals);
+
                 // initialize modals after they are added to the DOM
                 const modalInstances = M.Modal.init(document.querySelectorAll('.modal'), {});
 
