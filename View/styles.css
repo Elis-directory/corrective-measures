@@ -59,6 +59,7 @@
 html {
 	font-size: 100%;
 	line-height: 1.4;
+	
 }
 
 body {
@@ -728,4 +729,14 @@ h1 {
 
 .ticket-modal-btn{
 	margin: auto;
+}
+
+.board-title{
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	resize: none;
+	text-align: center;
+	font-size: 40px;
+	overflow: hidden;
 }
