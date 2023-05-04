@@ -21,39 +21,16 @@ import {
     onSnapshot,
     setDoc
 } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//     apiKey: "AIzaSyBxM_vt4dG48Wmf6t3FmcKNReYmgtjjDxU",
-//     authDomain: "correctivemeasures-7fd32.firebaseapp.com",
-//     projectId: "correctivemeasures-7fd32",
-//     storageBucket: "correctivemeasures-7fd32.appspot.com",
-//     messagingSenderId: "732418944057",
-//     appId: "1:732418944057:web:e1846d05b462557ce331e8",
-//     measurementId: "G-8M80GCH78F"
-//   };
 
 const firebaseConfig = {
-
     apiKey: "AIzaSyBxM_vt4dG48Wmf6t3FmcKNReYmgtjjDxU",
-
     authDomain: "correctivemeasures-7fd32.firebaseapp.com",
-
     databaseURL: "https://correctivemeasures-7fd32-default-rtdb.firebaseio.com",
-
     projectId: "correctivemeasures-7fd32",
-
     storageBucket: "correctivemeasures-7fd32.appspot.com",
-
     messagingSenderId: "732418944057",
-
     appId: "1:732418944057:web:e1846d05b462557ce331e8",
-
     measurementId: "G-8M80GCH78F"
-
 };
 
 // Initialize Firebase
@@ -619,84 +596,94 @@ function createNewTicket(modal, getInfo, boardId) {
     });
 }
 //================================================================================================
-
+const myButton = document.querySelector('#myButton');
+const myModal = document.getElementById('myModal');
+const close = document.querySelector('.close');
 const createTeams = document.querySelector('#create-team');
 
+if (myButton) {
+  myButton.addEventListener('click', function() {
+    myModal.style.display = 'block';
+  });
+}
+
 if (createTeams) {
-    createTeams.addEventListener('click', createTeam);
+  createTeams.addEventListener('click', function(e) {
+    e.preventDefault();
+    createTeam();
+    myModal.style.display = 'none';
+  });
+}
+
+if (close) {
+  close.addEventListener('click', function() {
+    myModal.style.display = 'none';
+  });
 }
 
 function createTeam() {
-    const teamsRef = collection(db, 'Teams');
-    addDoc(teamsRef, {
-        email: "email",
-        password: "password",
-        // Add any other required fields here
-    })
-        .then(() => {
-            console.log('Team added to Firestore');
-        })
-        .catch((error) => {
-            console.error('Error adding team to Firestore: ', error);
-        });
+  const teamsRef = collection(db, 'Teams');
+  addDoc(teamsRef, {
+    admin: auth.currentUser.uid, 
+    users:[],
+    tickets: []
+  })
+  .then(() => {
+    console.log('Team added to Firestore');
+  })
+  .catch((error) => {
+    console.error('Error adding team to Firestore: ', error);
+  });
 }
-
-
-
-
-
-
 
 //=======================Create Account==============================
-const signupForm = document.querySelector('#signup-form'); // get entire signup form and its contents
-if (signupForm) { // if signup form exists on the page
-    signupForm.addEventListener('submit', (e) => { // once form is submitted with button press
-        e.preventDefault(); // prevents default action
-        creatNewAccount() // creates account on firebase
+const signupForm = document.querySelector('#signup-form');
 
-    })
-}
+if (signupForm) {
+    signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-function creatNewAccount() {
-    //get user info
-    const email = signupForm['signup-email'].value;
-    const password = signupForm['signup-password'].value;
-    // const role = signupForm['signup-account-type'].value;
-    console.log(email, password);
+        // get user info
+        const email = signupForm['signup-email'].value;
+        const password = signupForm['signup-password'].value;
 
-    // Create the user account in Firebase Authentication
-    createUserWithEmailAndPassword(auth, email, password).then((cred) => {
-        console.log('user just signed up: ', cred); // console will display user that just signed in if worked correctly
+        // Create the user account in Firebase Authentication
+        createUserWithEmailAndPassword(auth, email, password).then((cred) => {
+            console.log('user just signed up: ', cred);
 
-        // Add the user's information to Firestore with a unique ID
-        const usersRef = collection(db, 'Users');
+            // Add the user's information to Firestore with a unique ID
+            const usersRef = collection(db, 'Users');
 
-        addDoc(usersRef, {
-            // Add user given what was submitted from modal
-            email: email,
-            password: password
-        }).then(() => {
-            console.log('User added to Firestore');
+            addDoc(usersRef, {
+                owner: cred.user.uid,
+                email: email,
+                password: password
+            }).then(() => {
+                console.log('User added to Firestore');
+
+                // Redirect to the success page
+                window.location.href = "signup-success.html";
+
+                // After 2 seconds, redirect to the login page
+                setTimeout(function() {
+                    window.location.href = "login.html";
+                }, 2000);
+            }).catch((error) => {
+                console.error('Error adding user to Firestore: ', error);
+            });
+
+            signupForm.reset();
+
         }).catch((error) => {
-            console.error('Error adding user to Firestore: ', error);
+
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode)
+            console.log(errorMessage)
+
+            signupForm.reset();
         });
-
-        signupForm.reset(); // reset signup form delared above
-        // window.location.href = "dashboard.html";
-
-
-    }).catch((error) => {
-
-        // display errors
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode)
-        console.log(errorMessage)
-
-        signupForm.reset(); // reset signup form delared above
-        // ..
     });
-
 }
 //================================================================================================
 
