@@ -61,16 +61,22 @@
 html {
 	font-size: 100%;
 	line-height: 1.4;
+	height: 100%;
+	margin: 0;
 }
 
 body {
 	font-family: 'Figtree', sans-serif;
 	color: var(--gray-base);
+	height: 100%;
+	margin: 0;
 }
 
 /* ================================================= */
 /* Main header */
 /* ================================================= */
+
+
 #main-header {
 	background-color: var(--main-header-bg);
 	padding: 1rem 1.5rem;
@@ -253,6 +259,10 @@ body.sidebar-open #sidebar {
 /* ================================================= */
 #main {
 	position: relative;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	height: 100%;
+	
 }
 
 #main-content {
@@ -267,11 +277,6 @@ body.sidebar-open #sidebar {
 	place-content: center;
 }
 
-
-/* ================================================= */
-/* Large screens */
-/* ================================================= */
-@media screen and (min-width: 768px) {
 	#main-header__sidebar-toggle {
 		display: none;
 	}
@@ -309,16 +314,7 @@ body.sidebar-open #sidebar {
 		position: relative;
 		transform: none;
 	}
-	html, body {
-		height: 100%;
-		margin: 0;
-	  }
-	#main {
-		display: grid;
-		grid-template-columns: auto 1fr;
-		height: 100%;
-		
-	}
+	
 
 
 

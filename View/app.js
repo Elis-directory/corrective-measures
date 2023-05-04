@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 // Theme switcher function
 const switchTheme = () => {
 	// Get root element and data-theme value
