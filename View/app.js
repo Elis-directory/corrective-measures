@@ -1,34 +1,8 @@
-//instanciate Pop Up Modals
-document.addEventListener('DOMContentLoaded', function () {
-    // get all modals
-    var elems = document.querySelectorAll('.modal');
-    //init them
-    M.Modal.init(elems)
-});
-
-// Sidebar toggle function
-const sidebarToggle = () => {
-	document.body.classList.toggle('sidebar-open')
-}
-
-// Sidebar trigger
-const sidebarTrigger = document.getElementById('main-header__sidebar-toggle')
-
-// Add the event listener for the sidebar toggle
-sidebarTrigger.addEventListener('click', sidebarToggle)
 
 
 
-// Sidebar collapse function
-const sidebarCollapse = () => {
-	document.body.classList.toggle('sidebar-collapsed')
-}
 
-// Sidebar trigger
-const sidebarCollapseTrigger = document.getElementById('sidebar__collapse')
 
-// Add the event listener for the sidebar toggle
-sidebarCollapseTrigger.addEventListener('click', sidebarCollapse)
 
 
 
@@ -71,7 +45,7 @@ activityLink.addEventListener('click', showActivityContent);
 
 function showDashboardContent() {
  
-  mainContent.innerHTML = '<iframe style="height: 100%; width: 100% " src="storyboard.html"></iframe>';
+  mainContent.innerHTML = '<iframe style="height: 100%; width: 100% " src="tabs/storyboard.html""></iframe>';
 }
 
 
@@ -107,7 +81,6 @@ function showActivityContent() {
  
   mainContent.innerHTML = '<h1>User Activity</h1><p>This is the User Activity content.</p>';
 }
-
 
 
 
