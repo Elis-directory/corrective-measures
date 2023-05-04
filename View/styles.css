@@ -59,6 +59,7 @@
 html {
 	font-size: 100%;
 	line-height: 1.4;
+	
 }
 
 body {
@@ -716,4 +717,26 @@ h1 {
 
 .btn:hover {
 	background-color: lightgrey;
+}
+
+.ticket-modal-title{
+	margin: auto;
+}
+
+.ticket-modal-components{
+	margin: auto;
+}
+
+.ticket-modal-btn{
+	margin: auto;
+}
+
+.board-title{
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	resize: none;
+	text-align: center;
+	font-size: 40px;
+	overflow: hidden;
 }
