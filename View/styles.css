@@ -63,6 +63,7 @@ html {
 	line-height: 1.4;
 	height: 100%;
 	margin: 0;
+	padding: 0;
 }
 
 body {
@@ -70,6 +71,7 @@ body {
 	color: var(--gray-base);
 	height: 100%;
 	margin: 0;
+	padding: 0;
 }
 
 /* ================================================= */
@@ -261,13 +263,12 @@ body.sidebar-open #sidebar {
 	position: relative;
 	display: grid;
 	grid-template-columns: auto 1fr;
-	height: 100%;
-	
-}
-
-#main-content {
-	padding: 1.5rem 1.5rem 0 1.5rem;
-}
+	min-height: 100vh; /* set a minimum height of 100vh */
+  }
+  
+  #main-content {
+	padding: 1.5rem;
+  }
 
 #main-content__container {
 	border: var(--gray-tint-50) 1px dashed;
