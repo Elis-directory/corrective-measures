@@ -1,0 +1,52 @@
+Date : 2023-05-04 09:59:59
+Directory : /Users/eliranchomoshe/Desktop/CC-v2
+Total : 19 files,  2743 codes, 388 comments, 519 blanks, all 3650 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| HTML       |         12 |      1,711 |        198 |        198 |      2,107 |
+| CSS        |          1 |        561 |         49 |        123 |        733 |
+| JavaScript |          5 |        462 |        141 |        191 |        794 |
+| Markdown   |          1 |          9 |          0 |          7 |         16 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                          | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                             |         19 |      2,743 |        388 |        519 |      3,650 |
+| . (Files)                                                     |          3 |        185 |         16 |         35 |        236 |
+| Controller                                                    |          1 |        369 |        122 |        119 |        610 |
+| Model                                                         |          2 |         52 |         13 |         18 |         83 |
+| View                                                          |         13 |      2,137 |        237 |        347 |      2,721 |
+| View (Files)                                                  |         10 |      2,049 |        211 |        333 |      2,593 |
+| View/tabs                                                     |          3 |         88 |         26 |         14 |        128 |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                      | language   | code       | comment    | blank      | total      |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /Users/eliranchomoshe/Desktop/CC-v2/Controller/controller.js  | JavaScript |        369 |        122 |        119 |        610 |
+| /Users/eliranchomoshe/Desktop/CC-v2/Model/accounts.js         | JavaScript |         24 |          5 |          7 |         36 |
+| /Users/eliranchomoshe/Desktop/CC-v2/Model/tickets.js          | JavaScript |         28 |          8 |         11 |         47 |
+| /Users/eliranchomoshe/Desktop/CC-v2/README.md                 | Markdown   |          9 |          0 |          7 |         16 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/about.html           | HTML       |        145 |         17 |         11 |        173 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/app.js               | JavaScript |         35 |          5 |         50 |         90 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/contact.html         | HTML       |        173 |         17 |         14 |        204 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/dashboard.html       | HTML       |        287 |         14 |         42 |        343 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/index.html           | HTML       |        259 |         26 |         17 |        302 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/login.html           | HTML       |        154 |         16 |         25 |        195 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/services.html        | HTML       |        144 |         18 |         11 |        173 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/signup-success.html  | HTML       |        138 |         18 |         18 |        174 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/signup.html          | HTML       |        153 |         31 |         22 |        206 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/styles.css           | CSS        |        561 |         49 |        123 |        733 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/tabs/storyboard.html | HTML       |         56 |         17 |          5 |         78 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/tabs/teams.html      | HTML       |         26 |          8 |          5 |         39 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/tabs/view.js         | JavaScript |          6 |          1 |          4 |         11 |
+| /Users/eliranchomoshe/Desktop/CC-v2/functions.html            | HTML       |         22 |          0 |          3 |         25 |
+| /Users/eliranchomoshe/Desktop/CC-v2/login copy.html           | HTML       |        154 |         16 |         25 |        195 |
+| Total                                                         |            |      2,743 |        388 |        519 |      3,650 |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
