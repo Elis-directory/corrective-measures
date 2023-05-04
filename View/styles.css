@@ -1,7 +1,3 @@
-
-/* ================================================= */
-/* CSS custom properties defined at the root level 
-/* ================================================= */
 :root {
 	--gray-base: #202430;
 	--gray-shade-60: #13161D;
@@ -55,18 +51,23 @@
 	--main-header-link-color: var(--gray-base);
 }
 
+
+
 /* ================================================= */
 /* General styles */
 /* ================================================= */
 html {
 	font-size: 100%;
 	line-height: 1.4;
+	
 }
 
 body {
 	font-family: 'Figtree', sans-serif;
 	color: var(--gray-base);
 }
+
+
 
 /* ================================================= */
 /* Main header */
@@ -121,6 +122,17 @@ body.sidebar-open #toggle-icon-close {
 #main-header a span {
 	display: none;
 }
+
+
+
+/* ================================================= */
+/* Main */
+/* ================================================= */
+#main {
+	position: relative;
+}
+
+
 
 /* ================================================= */
 /* Sidebar */
@@ -248,13 +260,11 @@ body.sidebar-open #sidebar {
 	transform: translate3d(0, 0, 0);
 }
 
+
+
 /* ================================================= */
 /* Main content */
 /* ================================================= */
-#main {
-	position: relative;
-}
-
 #main-content {
 	padding: 1.5rem 1.5rem 0 1.5rem;
 }
@@ -266,6 +276,7 @@ body.sidebar-open #sidebar {
 	display: grid;
 	place-content: center;
 }
+
 
 
 /* ================================================= */
@@ -309,22 +320,59 @@ body.sidebar-open #sidebar {
 		position: relative;
 		transform: none;
 	}
-	html, body {
-		height: 100%;
-		margin: 0;
-	  }
+
 	#main {
 		display: grid;
 		grid-template-columns: auto 1fr;
-		height: 100%;
-		
 	}
 
+	#sidebar__collapse {
+		display: flex;
+		align-items: center;
+		gap: .75rem;
+		padding: .75rem 0;
+		appearance: none;
+		background: transparent;
+		border: none;
+		font-size: 81.25%;
+		color: var(--primary-base);
+		cursor: pointer;
+	}
+
+	#sidebar__collapse svg {
+		fill: var(--primary-base);
+	}
+
+	body.sidebar-collapsed .menu-heading,
+	body.sidebar-collapsed #sidebar span {
+		display: none;
+	}
+
+	body.sidebar-collapsed #sidebar__theme-switcher {
+		display: none;
+	}
+
+	body.sidebar-collapsed #sidebar {
+		padding-right: 1.5rem;
+	}
+
+	body.sidebar-collapsed #sidebar a,
+	body.sidebar-collapsed #sidebar__collapse {
+		width: 2.75rem;
+		padding-right: 0;
+		justify-content: center;
+	}
+
+	body.sidebar-collapsed #sidebar__collapse svg {
+		transform: rotate(180deg);
+	}
+}
 
 
-/* ================================================= */
-/* Text Colors/ Fonts
-/* ================================================= */
+
+/*************************************************** Text Colors/ Fonts **************************************************/
+
+
 .c-font {
 	font-family: "Montserrat";
 	font-size: 1.2rem;
@@ -346,9 +394,9 @@ body.sidebar-open #sidebar {
 	font-size: 3.5rem;
 }
 
-/* ================================================= */
-/* Positioning
-/* ================================================= */
+/*************************************************** Positioning **************************************************/
+
+
 .p-width {
 	display: block;
 	margin-left: auto;
@@ -402,9 +450,10 @@ body.sidebar-open #sidebar {
 	height: 14rem;
 }
 
-/* ================================================= */
-/* Image Rendering 
-/* ================================================= */
+
+/*************************************************** Image Rendering **************************************************/
+
+
 .bg1-image {
 	background-image: url("images/marble.jpg");
 	background-size: cover;
@@ -443,9 +492,10 @@ body.sidebar-open #sidebar {
 	background-position: center;
 	height: 48rem;
 }
-/* ================================================= */
-/* Nav Bar
-/* ================================================= */
+
+/*************************************************** Nav Bar **************************************************/
+
+
 .nav-scroller .nav {
 	display: flex;
 	flex-wrap: nowrap;
@@ -481,16 +531,18 @@ body.sidebar-open #sidebar {
 	height: 5rem;
 	/* Adjust this value to increase the height of the navbar */
 }
-/* ================================================= */
-/* Login
-/* ================================================= */
+
+/*************************************************** Login **************************************************/
+
+
 .login-form {
 	max-width: 400px;
 	margin: 0 auto;
 }
-/* ================================================= */
-/*  Carousel
-/* ================================================= */
+
+/*************************************************** Carousel **************************************************/
+
+
 .carousel-control-prev,
 .carousel-control-next {
 	width: 6%;
@@ -531,9 +583,9 @@ body.sidebar-open #sidebar {
 	height: 28rem;
 }
 
-/* ================================================= */
-/* Cards*/
-/* ================================================= */
+/*************************************************** Cards **************************************************/
+
+
 #card-title {
 	margin-top: 6rem;
 	margin-bottom: 4rem;
@@ -579,73 +631,8 @@ body.sidebar-open #sidebar {
 	border-radius: 25px;
 }
 
-/* ================================================= */
-/* Modal */
-/* ================================================= */
-.modal {
-	display: none;
-	position: fixed;
-	z-index: 1;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0,0,0,0.4);
-  }
-  
-  .modal-content {
-	background-color: #fefefe;
-	margin: 15% auto;
-	padding: 20px;
-	border: 1px solid #888;
-	height: 13rem;
-	width: 60%;
-	display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .close {
-	position: absolute;
-	top: 0;
-	right: 0;
-	padding: 10px;
-	color: #aaa;
-	font-size: 28px;
-	font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-	color: #000;
-	text-decoration: none;
-	cursor: pointer;
-  }
+/*************************************************** Misc. **************************************************/
 
-  
-  .input-field-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  
-  .input-field {
-    flex-grow: 1;
-    margin-right: 1rem;
-  }
-  
-  #role {
-    flex-grow: 0;
-    width: 120px;
-  }
-}
-/* ================================================= */
-/* Misc.
-/* ================================================= */
 .clearfix {
 	clear: both;
 }
@@ -730,4 +717,26 @@ h1 {
 
 .btn:hover {
 	background-color: lightgrey;
+}
+
+.ticket-modal-title{
+	margin: auto;
+}
+
+.ticket-modal-components{
+	margin: auto;
+}
+
+.ticket-modal-btn{
+	margin: auto;
+}
+
+.board-title{
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+	resize: none;
+	text-align: center;
+	font-size: 40px;
+	overflow: hidden;
 }

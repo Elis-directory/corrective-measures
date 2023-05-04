@@ -1,7 +1,7 @@
 <!--
   - Program Name: dashboard.html (main webpage)
   - Author(s):       Trevor Kvanvig, Eliran Chomoshe
-  - Notes:     	 Website's 'dashboard' Structure, Websites Utilizes Bootstrap 5 Framework
+  - Notes:     	 Website's 'About Us' Structure, Websites Utilizes Bootstrap 5 Framework
     - * Work on .... Everything lol 
   -->
 <!DOCTYPE html>
@@ -11,6 +11,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Dashboard</title>
+	
 
 	<script>
 		// Check local storage ok
@@ -46,6 +47,10 @@
           rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
           crossorigin="anonymous">
+
+    
+
+		<link href="/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
 	<!-- Main stylesheet -->
 	<link rel="stylesheet" href="styles.css">
@@ -202,38 +207,13 @@
 
 		<div id="sidebar">
 
-			<button id="myButton">
+			<button id="create-team">
 				<svg>
 					<use xlink:href="#icon-collapse"></use>
 				</svg>
 				<span>Create Team</span>
 
 			</button>
-			<!-- <div id="modalTarget"></div> -->
-			<div id="myModal" class="modal">
-				<div class="modal-content">
-				  <span class="close">&times;</span>
-				  <h2 style="padding-bottom: 2rem;">Time to Create a Team!</h2>
-				  <br />
-				  <form>
-					<div class="input-field-container">
-					  <div class="input-field">
-						<label for="title">It takes more than one to make a team!</label>
-						<input type="text" name="title" placeholder="User Email" required>
-					  </div>
-					  <div class="input-field">
-						<select id="role" name="role">
-						  <option value="user">User</option>
-						  <option value="admin">Admin</option>
-						</select>
-					  </div>
-					</div>
-					<button  id="create-team" class="btn btn-sm btn-outline-secondary z-depth-0" style="float: right;">Add Team Member</button>
-				  </form>
-				</div>
-			  </div>
-
-			
 
 			<nav id="sidebar__nav">
 				<ul>
@@ -332,12 +312,5 @@
 
 	<script src="app.js"></script>
 	<script type="module" src="/Controller/controller.js"></script>
-	<!-- <script type="module" src="view.js" defer></script> -->
-	<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
-
-<!-- Add Firebase products that you want to use -->
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js"></script>
 </body>
 </html>
