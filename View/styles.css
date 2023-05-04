@@ -110,20 +110,9 @@ body {
 	transition: fill .4s ease-in-out;
 }
 
-#main-header__sidebar-toggle {
-	appearance: none;
-	background-color: transparent;
-	border: none;
-}
 
-#toggle-icon-close,
-body.sidebar-open #toggle-icon-menu {
-	display: none;
-}
 
-body.sidebar-open #toggle-icon-close {
-	display: block;
-}
+
 
 #main-header__logo,
 #main-header a span {
@@ -594,20 +583,22 @@ body.sidebar-open #sidebar {
   .modal-content-team {
 	background-color: #fefefe;
 	margin: 15% auto;
-	padding: ;
+	padding: 3%;
 	border: 1px solid #888;
-	height: 50rem;
+	height: 50%;
 	width: 60%;
 	display: flex;
-    flex-direction: column;
-    align-items: center;
+	flex-direction: column;
+	align-items: center;
+	position: relative; /* Added position:relative to the container */
+	border-radius: 1rem;
   }
   
   .close {
-	position: absolute;
+	position: absolute; /* Added absolute positioning */
 	top: 0;
 	right: 0;
-	padding: 10px;
+	padding-right: 10px;
 	color: #aaa;
 	font-size: 28px;
 	font-weight: bold;
@@ -619,7 +610,7 @@ body.sidebar-open #sidebar {
 	text-decoration: none;
 	cursor: pointer;
   }
-
+  
   
   .input-field-container {
     display: flex;
