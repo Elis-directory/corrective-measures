@@ -578,6 +578,7 @@ function createNewTicket(modal, getInfo, boardId) {
         e.preventDefault()
         // Create a new ticket object
         const newTicket = {
+            createdBy: auth.currentUser.uid,
             title: getInfo.title.value,
             priority: getInfo.priority.value,
             description: getInfo.description.value,
@@ -621,20 +622,42 @@ if (close) {
   });
 }
 
+// function createTeam() {
+//   const teamsRef = collection(db, 'Teams');
+//   addDoc(teamsRef, {
+//     docID: teamsRef.document.id,
+//     admin: auth.currentUser.uid, 
+//     users:[],
+//     tickets: []
+//   })
+//   .then(() => {
+//     console.log('Team added to Firestore');
+//   })
+//   .catch((error) => {
+//     console.error('Error adding team to Firestore: ', error);
+//   });
+// }
 function createTeam() {
-  const teamsRef = collection(db, 'Teams');
-  addDoc(teamsRef, {
-    admin: auth.currentUser.uid, 
-    users:[],
-    tickets: []
-  })
-  .then(() => {
-    console.log('Team added to Firestore');
-  })
-  .catch((error) => {
-    console.error('Error adding team to Firestore: ', error);
-  });
-}
+    const teamsRef = collection(db, 'Teams');
+    const newTeamRef = doc(teamsRef); // create a reference to a new Firestore document
+    const newTeamId = newTeamRef.id; // get the ID of the new document
+  
+    setDoc(newTeamRef, {
+      docID: newTeamId,
+      admin: auth.currentUser.uid, 
+      users:[],
+      tickets: []
+    })
+    .then(() => {
+      console.log('Team added to Firestore');
+    })
+    .catch((error) => {
+      console.error('Error adding team to Firestore: ', error);
+    });
+  }
+  
+  
+  
 
 //=======================Create Account==============================
 const signupForm = document.querySelector('#signup-form');
