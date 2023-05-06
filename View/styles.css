@@ -701,7 +701,7 @@ h1 {
 }
 
 .board-container {
-	max-height: 800px;
+	height: 100%;
 	border: 1px solid black;
 	background-color: black;
 	display: flex;
