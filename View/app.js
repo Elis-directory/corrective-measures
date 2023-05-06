@@ -23,7 +23,8 @@ const ticketLink = document.getElementById('ticket-link');
 const teamsLink = document.getElementById('teams-link');
 const userLink = document.getElementById('user-link');
 const activityLink = document.getElementById('activity-link');
-var mainContent = document.getElementById('main-content');
+let mainContent = document.getElementById('main-content');
+
 
 
 
@@ -32,6 +33,11 @@ ticketLink.addEventListener('click', showTicketContent);
 teamsLink.addEventListener('click', showTeamsContent);
 userLink.addEventListener('click', showUserContent);
 activityLink.addEventListener('click', showActivityContent);
+
+
+
+
+
 
 
 
@@ -56,7 +62,7 @@ function showTicketContent() {
 
 function showTeamsContent() {
  
-  mainContent.innerHTML = '<h1>Manage Teams</h1><p>This is the Manage Teams content.</p>';
+  mainContent.innerHTML = '<iframe style="height: 100%; width: 100% " src="tabs/manage-teams.html"></iframe>';
 }
 
 
