@@ -45,22 +45,102 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 //================================================================================================
+class User {
+    constructor(email = '', teamID = '', userID = '', username = '') {
+      this.email = email;
+      this.teamID = teamID;
+      this.userID = userID;
+      this.username = username;
+      console.log("Account constructor created successfully");
+    }
+  
+    getEmail() {
+      return this.email;
+    }
+  
+    setEmail(email) {
+      this.email = email;
+    }
+  
+    getTeamID() {
+      return this.teamID;
+    }
+  
+    setTeamID(teamID) {
+      this.teamID = teamID;
+    }
+  
+    getUserID() {
+      return this.userID;
+    }
+  
+    setUserID(userID) {
+      this.userID = userID;
+    }
+  
+    getUsername() {
+      return this.username;
+    }
+  
+    setUsername(username) {
+      this.username = username;
+    }
 
+    displayAll() {
+        console.log("cUser Contents: ", this.getUserID(), this.getEmail(), this.getUsername(), this.getTeamID())
+    }
+}
+const cUser = new User();
+
+
+
+
+//     if (user) {
+//       // User is signed in
+//       const userDocRef = doc(db, 'Users', user.uid);
+//       const userDocSnapshot = getDoc(userDocRef);
+//       if (userDocSnapshot.exists()) {
+//         const userData = userDocSnapshot.data();
+//         cUser.setEmail(userData.email);
+//         cUser.setTeamID(userData.teamID);
+//         cUser.setUserID(userData.userID);
+//         cUser.setUsername(userData.username);
+//         cUser.displayAll();
+//       } else {
+//         console.log('User document does not exist');
+//       }
+//     }
+// });
 
 // as soon as page loads get data from database and create boards
 let numOfBoards = 0;
 let BoardsInDatabase = 0;
+document.addEventListener('DOMContentLoaded', async function() {
 
-//When a board gets updated
-const colRef = collection(db, 'Boards')
-const q = query(colRef, orderBy("bTitle"));
-onSnapshot(q, (querySnapshot) => {
-    BoardsInDatabase = querySnapshot.size;
+    let teamID;
+        
+    // Wait for cUser to have a non-null TeamID value
+    while (!(teamID = cUser.getTeamID())) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    //When a board gets updated
+    const colRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/`)
+    const q = query(colRef, orderBy("bTitle"));
+    onSnapshot(q, (querySnapshot) => {
+        BoardsInDatabase = querySnapshot.size;
+        
+        createBoardsFromDB(querySnapshot)
+    })
+});
+
+
+async function createBoardsFromDB(qSH) {
+    let teamID;
     
-    createBoardsFromDB(querySnapshot)
-})
-
-function createBoardsFromDB(qSH) {
+    // Wait for cUser to have a non-null TeamID value
+    while (!(teamID = cUser.getTeamID())) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
     qSH.forEach((doc) => {
         const data = doc.data(); // retrieve plain JavaScript object representing the document
        
@@ -80,9 +160,15 @@ if (addBoardBtn) {
 
 
 
-function addNewBoard() {
+async function addNewBoard() {
+    let teamID;
+    
+    // Wait for cUser to have a non-null TeamID value
+    while (!(teamID = cUser.getTeamID())) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
     // get refrence to all boards on database
-    const boardRef = collection(db, "Boards");
+    const boardRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/`);
     // add board to database
     addDoc(boardRef, {
         // make the board title 'Board' and current number of bords
@@ -90,7 +176,7 @@ function addNewBoard() {
     }).then((docRef) => {
        
         // create new boad on site with id created from firestore
-        const newBoardRef = doc(db, `Boards/${docRef.id}`);
+        const newBoardRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${docRef.id}`);
         getDoc(newBoardRef).then((doc) => {
             const boardTitle = doc.data().bTitle;
            
@@ -104,9 +190,13 @@ function addNewBoard() {
 
 
 
-function addBoard(id, boardTitle) {
-
-    numOfBoards++
+async function addBoard(id, boardTitle) {
+    let teamID;
+    
+    // Wait for cUser to have a non-null TeamID value
+    while (!(teamID = cUser.getTeamID())) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
     if (numOfBoards <= BoardsInDatabase) {
         // Create a new board element
 
@@ -215,10 +305,16 @@ function deleteBoard(board, elem) {
 //===========================================Show Tickets On Site===================================
 //placeToAdd: html in board to display ticket list in
 //Board ID: ID of board in firebase to get tickets from
-function viewTicketList(placeToAdd, BoardId) {
+async function viewTicketList(placeToAdd, BoardId) {
     // create reference to ticket list associated with the board
-    const colRef = collection(db, 'Boards/' + BoardId + '/Tickets')
+    let teamID;
+     // Wait for cUser to have a non-null TeamID value
+    while (!(teamID = cUser.getTeamID())) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+    }
 
+    const colRef = collection(db, `Teams/${cUser.getTeamID().toString()}/Boards/${BoardId}/Tickets`)
+    console.log(colRef)
     // order tickets by priority
     const q = query(colRef, orderBy("priority"));
 
@@ -232,6 +328,8 @@ function viewTicketList(placeToAdd, BoardId) {
                 tickets.push({ ...doc.data(), id: doc.id })
             });
             // call setupTickets function with created list of sorted tickets
+            
+            console.log(tickets)
             setupTickets(tickets);
         }).catch(err => {
             // else diaplay error
@@ -253,7 +351,8 @@ function viewTicketList(placeToAdd, BoardId) {
             data.forEach(ticket => {
                 // make modal id to link to current ticket
                 const modalId = "modal-" + ticket.id;
-                const ticketRef = doc(db, 'Boards/' + BoardId + '/Tickets/', ticket.id);
+                console.log("ticketID", ticket.id)
+                const ticketRef = doc(db, `Teams/${cUser.getTeamID().toString()}/Boards/'${BoardId}/Tickets/`, ticket.id);
 
                 // ticket items holds what is in the modal
                 const ticketItems = `
@@ -326,7 +425,8 @@ function viewTicketList(placeToAdd, BoardId) {
                         // get the ID of the ticket to delete
                         const ticketId = button.dataset.ticketId;
                         // delete the ticket from the database
-                        const ticketRef = doc(db, `Boards/${BoardId}/Tickets/${ticketId}`);
+                        
+                        const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticketId}`);
                         deleteDoc(ticketRef).then(() => {
                             console.log(`Ticket ${ticketId} deleted successfully`);
                             // remove the modal from the DOM
@@ -547,18 +647,6 @@ function viewTicketList(placeToAdd, BoardId) {
 //===========================================User Class========================================
 
 
-class User {
-    constructor(userName, email, password, role) {
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-    toString() {
-        return this.name;
-    }
-}
-
 // Firestore data converter
 const userConverter = {
     toFirestore: (user) => {
@@ -577,9 +665,13 @@ const userConverter = {
 
 
 //===========================================Create Ticket========================================
-function createNewTicket(modal, getInfo, boardId) {
-
-    const boardRef = doc(db, "Boards", boardId);
+async function createNewTicket(modal, getInfo, boardId) {
+    let teamID;
+    // Wait for cUser to have a non-null TeamID value
+    while (!(teamID = cUser.getTeamID())) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    const boardRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/`, boardId);
 
     getInfo.addEventListener('submit', (e) => {
         e.preventDefault()
@@ -630,24 +722,26 @@ if (close) {
 }
 
 
-function createTeam() {
+async function createTeam() {
     const teamsRef = collection(db, 'Teams');
     const newTeamRef = doc(teamsRef); // create a reference to a new Firestore document
     const newTeamId = newTeamRef.id; // get the ID of the new document
   
-    setDoc(newTeamRef, {
-      docID: newTeamId,
-      admin: auth.currentUser.uid, 
-      users:[],
-      tickets: []
-    })
-    .then(() => {
+    try {
+      await setDoc(newTeamRef, {
+        docID: newTeamId,
+        admin: auth.currentUser.uid, 
+        users:[],
+        tickets: []
+      });
       console.log('Team added to Firestore');
-    })
-    .catch((error) => {
+      console.log("THE NEW CREATED TEAM ID IS:",newTeamId);
+      return newTeamId
+    } catch (error) {
       console.error('Error adding team to Firestore: ', error);
-    });
-  }
+    }
+}
+
   
   
   // function createTeam() {
@@ -675,34 +769,49 @@ if (signupForm) {
         e.preventDefault();
 
         // get user info
+        const username = signupForm['signup-username'].value;
         const email = signupForm['signup-email'].value;
         const password = signupForm['signup-password'].value;
 
         // Create the user account in Firebase Authentication
         createUserWithEmailAndPassword(auth, email, password).then((cred) => {
             console.log('user just signed up: ', cred);
-
             // Add the user's information to Firestore with a unique ID
             const usersRef = collection(db, 'Users');
+            const currentUser = cred.user.uid;
+            const userDocRef = doc(usersRef, currentUser);
 
-            addDoc(usersRef, {
-                owner: cred.user.uid,
+            setDoc(userDocRef, {
+                userID: currentUser,
+                username: username,
                 email: email,
-                password: password
+                
             }).then(() => {
+                cUser.setUserID(currentUser)
+                cUser.setUsername(username)
+                cUser.setEmail(email)
                 console.log('User added to Firestore');
-
-                // Redirect to the success page
-                window.location.href = "signup-success.html";
-
-                // After 2 seconds, redirect to the login page
-                setTimeout(function() {
-                    window.location.href = "login.html";
-                }, 2000);
+                // Add the team ID to the user's document
+                //call create team function
+                createTeam().then((teamID) => {
+                    console.log('New team ID in addTeamID', teamID);
+                    updateDoc(userDocRef, { 
+                        teamID: teamID,
+                    }).then(() => {
+                        cUser.setTeamID(teamID)
+                        console.log('Added team ID to user document');
+                        // Redirect to the success page
+                        //window.location.href = "dashboard.html";
+                    }).catch((error) => {
+                        console.error('Error updating document:', error);
+                    });
+                }).catch((error) => {
+                    console.error('Error creating team:', error);
+                });
             }).catch((error) => {
                 console.error('Error adding user to Firestore: ', error);
             });
-
+            cUser.displayAll()
             signupForm.reset();
 
         }).catch((error) => {
@@ -716,19 +825,32 @@ if (signupForm) {
         });
     });
 }
+
+
 //================================================================================================
 
 //=======================CHECK TO SEE IF USER IS SIGNED INTO SITE OR NOT==========================
 // listen for auth status changes
-onAuthStateChanged(auth, user => {
-    if (user) { // If there is a user currently logged in
-        console.log('user logged in: ', user);
-
-
-    } else { // if user is not currently logged in
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        // User is signed in
+        const userDocRef = doc(db, 'Users', user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+        if (userDocSnapshot.exists()) {
+            const userData = userDocSnapshot.data();
+            cUser.setEmail(userData.email);
+            cUser.setTeamID(userData.teamID);
+            cUser.setUserID(userData.userID);
+            cUser.setUsername(userData.username);
+            cUser.displayAll();
+        } else {
+            console.log('User document does not exist');
+        }
+    } else {
+        // User is signed out
         console.log('user logged out');
     }
-})
+});
 //================================================================================================
 
 //=======================CHECK TO SEE IF USER IS SIGNED INTO SITE OR NOT==========================
@@ -744,6 +866,7 @@ if (logout) {
 }
 //================================================================================================
 
+
 //===========================================SIGN IN==============================================
 // function authenticateCredentials(username, password);
 //signin
@@ -756,7 +879,7 @@ if (loginForm) { // if login form exists on current page
         const email = loginForm['login-email'].value;
         const password = loginForm['login-password'].value;
         console.log(email, password);
-
+        
         authenticateCredentials(email, password)
     })
 }
