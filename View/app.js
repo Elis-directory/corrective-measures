@@ -52,7 +52,8 @@ function showDashboardContent() {
 
 function showTicketContent() {
 
-  mainContent.innerHTML = '<h1>Tickets</h1><p>This is Ticket content.</p>';
+  
+  mainContent.innerHTML = '<iframe style="height: 100%; width: 100% " src="tabs/search-ticket.html"></iframe>';
 }
 
 
