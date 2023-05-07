@@ -306,7 +306,20 @@ body.sidebar-open #sidebar {
 	}
 	
 
-
+	.t-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+		margin-bottom: 1rem;
+	  }
+	  
+	 
+	  
+	  .t-search-container {
+		margin-top: 1rem;
+	  }
 
 /* ================================================= */
 /* Text Colors/ Fonts
