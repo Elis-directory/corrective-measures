@@ -740,3 +740,8 @@ h1 {
 .btn:hover {
 	background-color: lightgrey;
 }
+
+.tab-header 
+{
+	margin-left: 0;
+}
