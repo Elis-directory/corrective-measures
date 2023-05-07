@@ -19,8 +19,13 @@ import {
     addDoc,
     deleteDoc,
     onSnapshot,
-    setDoc
+    setDoc,
+    updateDoc, 
+    FieldValue,
+    arrayUnion
 } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js";
+
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyBxM_vt4dG48Wmf6t3FmcKNReYmgtjjDxU",
@@ -37,6 +42,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
 //================================================================================================
 
 
@@ -808,6 +814,36 @@ if (DTicketForm) {
 }
 
 //================================================================================================
+
+// add user to team
+const addToTeamButton = document.getElementById('addToTeam');
+
+addToTeamButton.addEventListener('click', async () => {
+  const teamId = document.getElementById('teamId').value;
+  const email = document.getElementById('email').value;
+
+  const teamRef = doc(db, 'Teams', teamId);
+
+  try {
+    const teamDoc = await getDoc(teamRef);
+
+    if (!teamDoc.exists()) {
+      console.log('No such document!');
+      return;
+    }
+
+    await updateDoc(teamRef, {
+      users: arrayUnion(email)
+    });
+
+    console.log('User added to team successfully!');
+  } catch (error) {
+    console.error('Error adding user to team: ', error);
+  }
+});
+
+
+
 // function changePassword(oldPassword, newPassword);
 
 // function viewProjectList(accountId);

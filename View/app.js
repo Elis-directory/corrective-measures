@@ -23,6 +23,7 @@ const ticketLink = document.getElementById('ticket-link');
 const teamsLink = document.getElementById('teams-link');
 const userLink = document.getElementById('user-link');
 const activityLink = document.getElementById('activity-link');
+
 let mainContent = document.getElementById('main-content');
 
 
@@ -33,6 +34,7 @@ ticketLink.addEventListener('click', showTicketContent);
 teamsLink.addEventListener('click', showTeamsContent);
 userLink.addEventListener('click', showUserContent);
 activityLink.addEventListener('click', showActivityContent);
+
 
 
 
@@ -80,8 +82,5 @@ function showActivityContent() {
  
   mainContent.innerHTML = '<h1>User Activity</h1><p>This is the User Activity content.</p>';
 }
-
-
-
 
 
