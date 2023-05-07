@@ -817,7 +817,7 @@ if (DTicketForm) {
 
 // add user to team
 const addToTeamButton = document.getElementById('addToTeam');
-
+if(addToTeamButton){
 addToTeamButton.addEventListener('click', async () => {
   const teamId = document.getElementById('teamId').value;
   const email = document.getElementById('email').value;
@@ -842,6 +842,61 @@ addToTeamButton.addEventListener('click', async () => {
   }
 });
 
+}
+
+
+
+
+const searchTicketButton = document.getElementById('search-ticket');
+const ticketContainer = document.getElementById('ticket-container');
+if(searchTicketButton) {
+searchTicketButton.addEventListener('click', async () => {
+  const ticketId = document.getElementById('ticketId').value;
+
+  const ticketRef = doc(db, 'Boards', '0AcIeQxJqAMrAnLX93K4', 'Tickets', '4ozVcjY6UmIsRqXAO4pl');
+
+
+  try {
+    const ticketDoc = await getDoc(ticketRef);
+
+    if (!ticketDoc.exists()) {
+      console.log('No such document!');
+      return;
+    }
+
+    const ticketData = ticketDoc.data();
+
+    // Clear previous ticket information in container
+ticketContainer.innerHTML = '';
+
+// Create container element for ticket information
+const ticketInfo = document.createElement('div');
+ticketInfo.classList.add('ticket-info');
+ticketContainer.appendChild(ticketInfo);
+
+// Create and append elements to display ticket information
+const ticketTitle = document.createElement('h2');
+ticketTitle.classList.add('ticket-title');
+ticketTitle.textContent = ticketData.title;
+ticketInfo.appendChild(ticketTitle);
+
+const ticketPriority = document.createElement('h3');
+ticketPriority.classList.add('ticket-priority');
+ticketPriority.textContent = `Priority: ${ticketData.priority}`;
+ticketInfo.appendChild(ticketPriority);
+
+const ticketDescription = document.createElement('p');
+ticketDescription.classList.add('ticket-description');
+ticketDescription.textContent = ticketData.description;
+ticketInfo.appendChild(ticketDescription);
+
+
+    console.log('Ticket retrieved successfully!');
+  } catch (error) {
+    console.error('Error retrieving ticket: ', error);
+  }
+});
+}
 
 
 // function changePassword(oldPassword, newPassword);
