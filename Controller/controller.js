@@ -22,7 +22,8 @@ import {
     setDoc,
     updateDoc, 
     FieldValue,
-    arrayUnion
+    arrayUnion,
+    arrayRemove
 } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-firestore.js";
 
 
@@ -628,21 +629,7 @@ if (close) {
   });
 }
 
-// function createTeam() {
-//   const teamsRef = collection(db, 'Teams');
-//   addDoc(teamsRef, {
-//     docID: teamsRef.document.id,
-//     admin: auth.currentUser.uid, 
-//     users:[],
-//     tickets: []
-//   })
-//   .then(() => {
-//     console.log('Team added to Firestore');
-//   })
-//   .catch((error) => {
-//     console.error('Error adding team to Firestore: ', error);
-//   });
-// }
+
 function createTeam() {
     const teamsRef = collection(db, 'Teams');
     const newTeamRef = doc(teamsRef); // create a reference to a new Firestore document
@@ -663,6 +650,21 @@ function createTeam() {
   }
   
   
+  // function createTeam() {
+//   const teamsRef = collection(db, 'Teams');
+//   addDoc(teamsRef, {
+//     docID: teamsRef.document.id,
+//     admin: auth.currentUser.uid, 
+//     users:[],
+//     tickets: []
+//   })
+//   .then(() => {
+//     console.log('Team added to Firestore');
+//   })
+//   .catch((error) => {
+//     console.error('Error adding team to Firestore: ', error);
+//   });
+// }
   
 
 //=======================Create Account==============================
@@ -844,7 +846,36 @@ addToTeamButton.addEventListener('click', async () => {
 
 }
 
+// delete user from team
+const deleteFromTeamButton = document.getElementById('deleteFromTeam');
+if (deleteFromTeamButton) {
+  deleteFromTeamButton.addEventListener('click', async () => {
+    const teamId = document.getElementById('teamId').value;
+    const email = document.getElementById('email').value;
 
+    const teamRef = doc(db, 'Teams', teamId);
+
+    try {
+      const teamDoc = await getDoc(teamRef);
+
+      if (!teamDoc.exists()) {
+        console.log('No such document!');
+        return;
+      }
+
+      await updateDoc(teamRef, {
+        users: arrayRemove(email)
+      });
+
+      console.log('User deleted from team successfully!');
+    } catch (error) {
+      console.error('Error deleting user from team: ', error);
+    }
+  });
+}
+
+
+// search for ticket tab on dashboard
 
 
 const searchTicketButton = document.getElementById('search-ticket');
