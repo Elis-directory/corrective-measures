@@ -40,16 +40,10 @@ activityLink.addEventListener('click', showActivityContent);
 
 
 
-
-
-
 function showDashboardContent() {
  
   mainContent.innerHTML = '<iframe style="height: 100%; width: 100% " src="tabs/storyboard.html""></iframe>';
 }
-
-
-
 
 
 function showTicketContent() {
@@ -74,13 +68,13 @@ function showTeamsContent() {
 
 function showUserContent() {
   
-  mainContent.innerHTML = '<h1>user management</h1><p>This is the user management content.</p>';
+    mainContent.innerHTML = '<iframe style="height: 100%; width: 100% " src="tabs/add-member.html"></iframe>';
 }
 
 
 function showActivityContent() {
  
-  mainContent.innerHTML = '<h1>User Activity</h1><p>This is the User Activity content.</p>';
+    mainContent.innerHTML = '<iframe style="height: 100%; width: 100% " src="tabs/delete-member.html"></iframe>';
 }
 
 
