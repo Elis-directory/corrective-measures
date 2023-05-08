@@ -14,6 +14,7 @@ import {
     doc,
     getDoc,
     query,
+    where,
     getDocs,
     orderBy,
     addDoc,
@@ -1050,8 +1051,64 @@ ticketInfo.appendChild(ticketDescription);
     console.error('Error retrieving ticket: ', error);
   }
 });
+
 }
 
+const teamsLinks = document.getElementById('search-team');
+const memberContainer = document.getElementById('member-container');
+
+if (teamsLinks) {
+  teamsLinks.addEventListener("click", async () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      
+
+      const userDocRef = doc(db, "Users", currentUser.uid);
+      const userDoc = await getDoc(userDocRef);
+      const teamID = userDoc.data().teamID;
+      console.log("Team ID: " + teamID);
+
+      // create a query for all users with the same teamID
+      const usersCollection = collection(db, "Users");
+      const querySnapshot = await getDocs(query(usersCollection, where("teamID", "==", teamID)));
+      const users = [];
+      querySnapshot.forEach((doc) => {
+        // push the user document data to the users array
+        users.push(doc.data().email);
+      });
+
+      if (users.length != 0) {
+        const ul = document.createElement('ul');
+        users.forEach((user) => {
+          const li = document.createElement('li');
+          li.classList.add('member-2');
+          li.textContent = user;
+          ul.appendChild(li);
+        });
+        memberContainer.innerHTML = '';
+        memberContainer.appendChild(ul);
+      }
+
+    } else {
+      console.error("Current user not found");
+    }
+  });
+}
+
+
+
+
+
+
+
+
+// create a query for all users with the same teamID as the current user
+// 
+
+
+
+
+  
 
 // function changePassword(oldPassword, newPassword);
 
@@ -1085,3 +1142,43 @@ ticketInfo.appendChild(ticketDescription);
 
 // function activateAccount();
 
+// const searchTicketButton = document.getElementById('search-ticket');
+// const ticketContainer = document.getElementById('ticket-container');
+// if(searchTicketButton) {
+//   searchTicketButton.addEventListener('click', async () => {
+//     const ticketId = document.getElementById('ticketId').value;
+
+//     try {
+//       // Query the database for the ticket with the given ID
+//       const ticketQuery = query(collection(db, 'Boards'), where('Tickets.'+ticketId, '==', true));
+//       const querySnapshot = await getDocs(ticketQuery);
+//       if (querySnapshot.empty) {
+//         console.log('No such document!');
+//         return;
+//       }
+
+//       // Get the boardId that holds the ticket
+//       const boardId = querySnapshot.docs[0].id;
+
+//       // Construct the ticketRef variable using the boardId and ticketId
+//       const ticketRef = doc(db, 'Boards', boardId, 'Tickets', ticketId);
+
+//       // Retrieve the ticket data from the corresponding document
+//       const ticketDoc = await getDoc(ticketRef);
+//       if (!ticketDoc.exists()) {
+//         console.log('No such document!');
+//         return;
+//       }
+
+//       const ticketData = ticketDoc.data();
+
+//       // Clear previous ticket information in container
+//       ticketContainer.innerHTML = '';
+
+//       // Create container element for ticket information
+//       const ticketInfo = document.createElement('div');
+//       ticketInfo.classList.add('ticket-info');
+//       ticketContainer.appendChild(ticketInfo);
+
+//       // Create and append elements to display ticket information
+//       const ticketTitle = document.createElement('h2');}

@@ -1,0 +1,13 @@
+"filename", "language", "JavaScript", "HTML", "CSS", "comment", "blank", "total"
+"/Users/eliranchomoshe/Desktop/CC-v2/Controller/controller.js", "JavaScript", 183, 0, 0, 88, 84, 355
+"/Users/eliranchomoshe/Desktop/CC-v2/View/app.js", "JavaScript", 0, 0, 0, 0, -9, -9
+"/Users/eliranchomoshe/Desktop/CC-v2/View/dashboard.html", "HTML", 0, -6, 0, 0, 1, -5
+"/Users/eliranchomoshe/Desktop/CC-v2/View/login.html", "HTML", 0, 0, 0, -2, 0, -2
+"/Users/eliranchomoshe/Desktop/CC-v2/View/styles.css", "CSS", 0, 0, 22, -3, 8, 27
+"/Users/eliranchomoshe/Desktop/CC-v2/View/tabs/add-member.html", "HTML", 0, 27, 0, 13, 8, 48
+"/Users/eliranchomoshe/Desktop/CC-v2/View/tabs/delete-member.html", "HTML", 0, 27, 0, 13, 8, 48
+"/Users/eliranchomoshe/Desktop/CC-v2/View/tabs/manage-teams.html", "HTML", 0, 22, 0, 13, 9, 44
+"/Users/eliranchomoshe/Desktop/CC-v2/View/tabs/search-ticket.html", "HTML", 0, 26, 0, 13, 4, 43
+"/Users/eliranchomoshe/Desktop/CC-v2/View/tabs/teams.html", "HTML", 0, -26, 0, -8, -5, -39
+"/Users/eliranchomoshe/Desktop/CC-v2/login copy.html", "HTML", 0, -154, 0, -16, -25, -195
+"Total", "-", 183, -84, 22, 111, 83, 315
