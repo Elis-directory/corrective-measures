@@ -1,0 +1,42 @@
+Date : 2023-05-07 10:32:29
+Directory : /Users/eliranchomoshe/Desktop/CC-v2
+Total : 11 files,  121 codes, 111 comments, 83 blanks, all 315 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |          2 |        183 |         88 |         75 |        346 |
+| CSS        |          1 |         22 |         -3 |          8 |         27 |
+| HTML       |          8 |        -84 |         26 |          0 |        -58 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                             | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                |         11 |        121 |        111 |         83 |        315 |
+| . (Files)                                                        |          1 |       -154 |        -16 |        -25 |       -195 |
+| Controller                                                       |          1 |        183 |         88 |         84 |        355 |
+| View                                                             |          9 |         92 |         39 |         24 |        155 |
+| View (Files)                                                     |          4 |         16 |         -5 |          0 |         11 |
+| View/tabs                                                        |          5 |         76 |         44 |         24 |        144 |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                         | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /Users/eliranchomoshe/Desktop/CC-v2/Controller/controller.js     | JavaScript |        183 |         88 |         84 |        355 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/app.js                  | JavaScript |          0 |          0 |         -9 |         -9 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/dashboard.html          | HTML       |         -6 |          0 |          1 |         -5 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/login.html              | HTML       |          0 |         -2 |          0 |         -2 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/styles.css              | CSS        |         22 |         -3 |          8 |         27 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/tabs/add-member.html    | HTML       |         27 |         13 |          8 |         48 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/tabs/delete-member.html | HTML       |         27 |         13 |          8 |         48 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/tabs/manage-teams.html  | HTML       |         22 |         13 |          9 |         44 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/tabs/search-ticket.html | HTML       |         26 |         13 |          4 |         43 |
+| /Users/eliranchomoshe/Desktop/CC-v2/View/tabs/teams.html         | HTML       |        -26 |         -8 |         -5 |        -39 |
+| /Users/eliranchomoshe/Desktop/CC-v2/login copy.html              | HTML       |       -154 |        -16 |        -25 |       -195 |
+| Total                                                            |            |        121 |        111 |         83 |        315 |
++------------------------------------------------------------------+------------+------------+------------+------------+------------+
