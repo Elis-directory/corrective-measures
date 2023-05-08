@@ -1087,7 +1087,14 @@ if (teamsLinks) {
         });
         memberContainer.innerHTML = '';
         memberContainer.appendChild(ul);
+        
+        // add team ID to the bottom of the list
+        const teamLi = document.createElement('li');
+        teamLi.classList.add('team-id');
+        teamLi.textContent = 'Team ID: ' + teamID;
+        ul.appendChild(teamLi);
       }
+
 
     } else {
       console.error("Current user not found");
