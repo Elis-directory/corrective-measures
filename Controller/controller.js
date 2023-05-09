@@ -966,15 +966,15 @@ const addButton = document.getElementById('addToTeam');
 if(addButton) {
     addButton.addEventListener('click', async () => {
         const userId = document.getElementById('userId').value;
-        const currentUser = auth.currentUser;
-        if (currentUser) {
-          
-    
-          const userDocRef = doc(db, "Users", currentUser.uid);
-          const userDoc = await getDoc(userDocRef);
-          const teamID = userDoc.data().teamID;
-          console.log("Team ID: " + teamID);
-    
+       const currentUser = auth.currentUser;
+    if (currentUser) {
+      
+
+      const userDocRef = doc(db, "Users", currentUser.uid);
+      const userDoc = await getDoc(userDocRef);
+      const teamID = userDoc.data().teamID;
+      console.log("Team ID: " + teamID);
+
 
 
 
@@ -983,12 +983,11 @@ if(addButton) {
         
         try {
           // Update the user document with an empty teamID field
-          await updateDoc(userRef, { teamID: "auth.currentUser.teamID" });
+          await updateDoc(userRef, { teamID: teamID});
           console.log(`User with id ${userId}'s teamID has been updated.`);
         } catch (error) {
           console.error(`Error updating user with id ${userId}:`, error);
         }
-
     }
       });
 }
