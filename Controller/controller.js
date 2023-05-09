@@ -91,7 +91,6 @@ class User {
     }
 }
 const cUser = new User();
-let IframeSource;
 
 
 //     if (user) {
@@ -153,9 +152,10 @@ async function createBoardsFromDB(qSH) {
 
 const addBoardBtn = document.getElementById("add-board-btn")
 if (addBoardBtn) {
-    addBoardBtn.addEventListener("click", function (e) {
+    addBoardBtn.addEventListener("click", async function (e) {
         e.preventDefault(); // stops default action
-        addNewBoard()
+        await addNewBoard()
+        location.reload()
         
     })
 }
@@ -172,7 +172,7 @@ async function addNewBoard() {
     // get refrence to all boards on database
     const boardRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/`);
     // add board to database
-    addDoc(boardRef, {
+    await addDoc(boardRef, {
         // make the board title 'Board' and current number of bords
         bTitle: `New Board`,
     }).then((docRef) => {
@@ -258,7 +258,7 @@ async function addBoard(id, boardTitle) {
             deleteBoard(boardRef, boardElement);
         });
 
-        addTicketBtn.addEventListener('click', function (event) {
+        addTicketBtn.addEventListener('click', async function (event) {
             event.preventDefault();
             const boardElement = event.target.closest('.board');
             const boardId = boardElement.dataset.boardId;
@@ -273,18 +273,19 @@ async function addBoard(id, boardTitle) {
         //if there is a board with a title on the page
         if (boardT) {
             //if input feild is changed
-            boardT.addEventListener("input", function () {
+            boardT.addEventListener("input", async function () {
                 //get refence to the board on firebase to update title
                 const titleRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${id}`);
                 
                 // get the board document
-                getDoc(titleRef).then((docSnap) => {
+                await getDoc(titleRef).then((docSnap) => {
                     // if sucessful
                     if (docSnap.exists()) {
                         // change board title to what is in textbox 
                         setDoc(titleRef, {
                             bTitle: boardT.value
                         }).then(() => {
+                            
                             console.log('Document successfully updated! new title is', boardT.value );
                         })
                             .catch((error) => {
@@ -302,16 +303,19 @@ async function addBoard(id, boardTitle) {
         const ticketList = newBoard.querySelector('#TicketList')
         // call fucntion to display tickets on screen
         viewTicketList(ticketList, id)
+        
     }
     
     
 }
 
-function deleteBoard(board, elem) {
+async function deleteBoard(board, elem) {
     // remove board from html
-    elem.remove();
+    await elem.remove();
     // remove board from firebase
-    deleteDoc(board);
+    await deleteDoc(board);
+    await numOfBoards--
+    await location.reload()
 }
 
 //===========================================Show Tickets On Site===================================
@@ -350,7 +354,7 @@ async function viewTicketList(placeToAdd, BoardId) {
         console.log(err.message);
     }
 
-    function setupTickets(data) {
+    async function setupTickets(data) {
         // create an empty div to store created modals for each ticket HTML
         const modals = document.createElement('div');
 
@@ -430,7 +434,7 @@ async function viewTicketList(placeToAdd, BoardId) {
                 // let isChanged = false;
                 
                 deleteTicketBtns.forEach((button) => {
-                    button.addEventListener('click', function (event) {
+                    button.addEventListener('click', async function (event) {
                         event.preventDefault();
                         const ticketId = button.dataset.ticketId;
                         const ticketItem = document.querySelector(`#ticketToClick${ticketId}`);
@@ -442,7 +446,7 @@ async function viewTicketList(placeToAdd, BoardId) {
                         const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticketId}`);
                         console.log(ticketItem)
                         ticketItem.remove()
-                        deleteDoc(ticketRef).then(() => {
+                        await deleteDoc(ticketRef).then(() => {
                             console.log(`Ticket ${ticketId} deleted successfully`);
                             // remove the modal from the DOM
                             const modal = button.closest('.modal');
@@ -461,13 +465,13 @@ async function viewTicketList(placeToAdd, BoardId) {
                 if (ticketTitle) {
                     
                     //if input feild is changed
-                    ticketTitle.addEventListener("input", function () {
+                    ticketTitle.addEventListener("input", async function () {
                         //get refence to the board on firebase to update title
                         console.log('Ticket title being changed with id of => ', ticket.id)
-                        const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticket.id}`);
+                        const ticketRef = await doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticket.id}`);
                         
                         // get the board document
-                        getDoc(ticketRef).then((docSnap) => {
+                        await getDoc(ticketRef).then((docSnap) => {
                             // if sucessful
                             if (docSnap.exists()) {
                                 // change board title to what is in textbox 
@@ -642,6 +646,7 @@ async function createNewTicket(modal, getInfo, boardId) {
             .then(() => {
                 console.log("Ticket added to Firestore!");
                 getInfo.reset();
+                location.reload()
                 M.Modal.getInstance(modal).close(); // close the modal
                 getInfo.removeEventListener("submit", submitHandler); // remove the event listener
                 isAdding = false;
