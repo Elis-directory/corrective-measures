@@ -52,7 +52,6 @@ class User {
       this.teamID = teamID;
       this.userID = userID;
       this.username = username;
-      console.log("Account constructor created successfully");
     }
   
     getEmail() {
@@ -93,6 +92,8 @@ class User {
 }
 const cUser = new User();
 
+const storyBoardFrame = document.getElementById('storyboard-iframe');
+//iframe.contentWindow.location.reload();
 
 
 
@@ -245,7 +246,7 @@ async function addBoard(id, boardTitle) {
             event.preventDefault(); // stops default action
             const boardElement = event.target.closest('.board');
             const boardId = boardElement.dataset.boardId;
-            const boardRef = doc(db, 'Boards', boardId);
+            const boardRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${boardId}`);
             
             deleteBoard(boardRef, boardElement);
         });
@@ -254,7 +255,7 @@ async function addBoard(id, boardTitle) {
             event.preventDefault();
             const boardElement = event.target.closest('.board');
             const boardId = boardElement.dataset.boardId;
-            const boardRef = doc(db, 'Boards', boardId);
+            const boardRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${boardId}`);
             
             const getInfo = document.getElementById('addTicket-form');
             const modal = document.getElementById('modal-addTicket')
@@ -267,7 +268,7 @@ async function addBoard(id, boardTitle) {
             //if input feild is changed
             boardT.addEventListener("input", function () {
                 //get refence to the board on firebase to update title
-                const titleRef = doc(db, 'Boards', id);
+                const titleRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${id}`);
                 
                 // get the board document
                 getDoc(titleRef).then((docSnap) => {
@@ -314,7 +315,7 @@ async function viewTicketList(placeToAdd, BoardId) {
         await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    const colRef = collection(db, `Teams/${cUser.getTeamID().toString()}/Boards/${BoardId}/Tickets`)
+    const colRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets`)
     console.log(colRef)
     // order tickets by priority
     const q = query(colRef, orderBy("priority"));
@@ -343,6 +344,7 @@ async function viewTicketList(placeToAdd, BoardId) {
         // create an empty div to store created modals for each ticket HTML
         const modals = document.createElement('div');
 
+
         // if there are tickets in the list
         if (data.length != 0) {
             // placeholder for html code
@@ -350,10 +352,10 @@ async function viewTicketList(placeToAdd, BoardId) {
 
             // go through each ticket
             data.forEach(ticket => {
+                //const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticket.id}`);
+
                 // make modal id to link to current ticket
                 const modalId = "modal-" + ticket.id;
-                console.log("ticketID", ticket.id)
-                const ticketRef = doc(db, `Teams/${cUser.getTeamID().toString()}/Boards/'${BoardId}/Tickets/`, ticket.id);
 
                 // ticket items holds what is in the modal
                 const ticketItems = `
@@ -428,6 +430,7 @@ async function viewTicketList(placeToAdd, BoardId) {
                         // delete the ticket from the database
                         
                         const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticketId}`);
+
                         deleteDoc(ticketRef).then(() => {
                             console.log(`Ticket ${ticketId} deleted successfully`);
                             // remove the modal from the DOM
@@ -439,22 +442,22 @@ async function viewTicketList(placeToAdd, BoardId) {
                         // close the modal
                         const modal = button.closest('.modal');
                         const modalInstance = M.Modal.getInstance(modal);
+                        storyBoardFrame.contentWindow.location.reload();
                         modalInstance.close();
                     });
                 });
                 M.Modal.init(document.querySelectorAll('.modal'), {});
 
                 if (ticketTitle) {
+                    
                     //if input feild is changed
                     ticketTitle.addEventListener("input", function () {
                         //get refence to the board on firebase to update title
                         console.log('Ticket title being changed with id of => ', ticket.id)
+                        const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticket.id}`);
                         
-                        
-                   
                         // get the board document
                         getDoc(ticketRef).then((docSnap) => {
-                            console.log(docSnap)
                             // if sucessful
                             if (docSnap.exists()) {
                                 // change board title to what is in textbox 
@@ -486,7 +489,9 @@ async function viewTicketList(placeToAdd, BoardId) {
                     //if input feild is changed
                     ticketPriority.addEventListener("input", function () {
                         //get refence to the board on firebase to update title
-                        console.log('Ticket title being changed with id of => ', ticket.id)
+                        const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticket.id}`);
+
+                        console.log('Ticket priority being changed with id of => ', ticket.id)
                         
                         
                    
@@ -522,7 +527,9 @@ async function viewTicketList(placeToAdd, BoardId) {
                     //if input feild is changed
                     ticketDescription.addEventListener("input", function () {
                         //get refence to the board on firebase to update title
-                        console.log('Ticket title being changed with id of => ', ticket.id)
+                        const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticket.id}`);
+
+                        console.log('Ticket description being changed with id of => ', ticket.id)
                         
                         
                    
@@ -672,7 +679,7 @@ async function createNewTicket(modal, getInfo, boardId) {
     while (!(teamID = cUser.getTeamID())) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-    const boardRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/`, boardId);
+    const boardRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${boardId}`);
 
     getInfo.addEventListener('submit', (e) => {
         e.preventDefault()
@@ -732,7 +739,7 @@ async function createTeam() {
       await setDoc(newTeamRef, {
         docID: newTeamId,
         admin: auth.currentUser.uid, 
-        users:[],
+        chat:[],
         tickets: []
       });
       console.log('Team added to Firestore');
@@ -924,20 +931,20 @@ function authenticateCredentials(email, password) {
 
 //===========================================Delete Ticket========================================
 // function deleteTicket(ticket);
-const DTicketForm = document.querySelector('#deleteTicket-form')
-const DTicketModal = document.querySelector('#modal-deleteTicket')
-if (DTicketForm) {
-    DTicketForm.addEventListener('submit', (e) => {
-        e.preventDefault() // stops page from refreshing
+// const DTicketForm = document.querySelector('#deleteTicket-form')
+// const DTicketModal = document.querySelector('#modal-deleteTicket')
+// if (DTicketForm) {
+//     DTicketForm.addEventListener('submit', (e) => {
+//         e.preventDefault() // stops page from refreshing
 
-        const docRef = doc(db, 'Tickets', DTicketForm.id.value)
-        deleteDoc(docRef)
-            .then(() => {
-                DTicketForm.reset()
-            })
+//         const docRef = doc(db, 'Tickets', DTicketForm.id.value)
+//         deleteDoc(docRef)
+//             .then(() => {
+//                 DTicketForm.reset()
+//             })
 
-    })
-}
+//     })
+// }
 
 //================================================================================================
 
@@ -1116,30 +1123,60 @@ if (teamsLinks) {
   });
 }
 
-
-
 const chatbox = document.querySelector('.chatbox');
 const collapseButton = document.querySelector('.collapse-button');
-const form = document.querySelector('.message-form');
-const input = form.querySelector('input');
-const messages = document.querySelector('.messages');
 
 collapseButton.addEventListener('click', () => {
   chatbox.classList.toggle('collapsed');
 });
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if (input.value.trim() !== '') {
-    const message = document.createElement('div');
-    message.classList.add('message', 'sent');
-    message.innerHTML = `<p>${input.value}</p>`;
-    messages.appendChild(message);
-    messages.scrollTop = messages.scrollHeight;
-    input.value = '';
-  }
-});
 
+
+const form = document.querySelector('.message-form');
+const messages = document.querySelector('.messages');
+
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = form.querySelector('input');
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      if (input.value.trim() !== '') {
+        const userDocRef = doc(db, "Users", currentUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        const teamId = userDocSnap.data().teamID;
+        const message = input.value.trim();
+        input.value = '';
+        try {
+          // Get a reference to the team document with the provided id
+          const teamRef = doc(db, 'Teams', teamId);
+
+          // Update the chat array in the team document
+          await updateDoc(teamRef, {
+            chat: arrayUnion(message)
+          });
+
+          console.log(`Message "${message}" has been added to the chat.`);
+
+          // Display the entire chat array in the chat box
+          const teamSnapshot = await getDoc(teamRef);
+          const chat = teamSnapshot.data().chat;
+          messages.innerHTML = '';
+          chat.forEach((message) => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'received');
+            messageElement.innerHTML = `<p>${message}</p>`;
+            messages.appendChild(messageElement);
+          });
+          messages.scrollTop = messages.scrollHeight;
+
+        } catch (error) {
+          console.error(`Error adding message "${message}" to the chat:`, error);
+        }
+      }
+    }
+  });
+}
 
 
 

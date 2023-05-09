@@ -783,10 +783,11 @@ h1 {
 	box-sizing: border-box;
 	overflow-y: scroll;
 	transition: all 0.5s ease;
+	border-radius: 10px;
   }
   
   .chatbox.collapsed {
-	height: 40px;
+	height: 4rem;
 	overflow: hidden;
   }
   
@@ -825,9 +826,24 @@ h1 {
   }
   
   .message-form button {
-	background-color: #4CAF50;
+	background-color: #000;
 	color: white;
 	border: none;
 	padding: 10px;
 	border-radius: 5px;
-  
+  }
+
+  .collapse-button {
+	display: inline-block;
+	padding: 12px 12px;
+	border-radius: 1rem;
+	font-size: 8px;
+	font-weight: bold;
+	text-align: center;
+	text-transform: uppercase;
+	color: #ffffff;
+	background-color: #000000;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+  }
