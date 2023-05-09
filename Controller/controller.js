@@ -941,61 +941,76 @@ if (DTicketForm) {
 
 //================================================================================================
 
-// add user to team
-const addToTeamButton = document.getElementById('addToTeam');
-if(addToTeamButton){
-addToTeamButton.addEventListener('click', async () => {
-  const teamId = document.getElementById('teamId').value;
-  const email = document.getElementById('email').value;
+// const addToTeamButton = document.getElementById('addToTeam');
 
-  const teamRef = doc(db, 'Teams', teamId);
+// if (addToTeamButton) {
+//   addToTeamButton.addEventListener('click', async () => {
+//     const teamId = document.getElementById('teamId').value;
+//     const email = document.getElementById('email').value;
 
-  try {
-    const teamDoc = await getDoc(teamRef);
+//     const userRef = doc(db, 'Users', email);
 
-    if (!teamDoc.exists()) {
-      console.log('No such document!');
-      return;
+//     try {
+//       await updateDoc(userRef, {
+//         teamID: teamId
+//       });
+
+//       console.log('User added to team successfully!');
+//     } catch (error) {
+//       console.error('Error adding user to team: ', error);
+//     }
+//   });
+// }
+
+const addButton = document.getElementById('addToTeam');
+if(addButton) {
+    addButton.addEventListener('click', async () => {
+        const userId = document.getElementById('userId').value;
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          
+    
+          const userDocRef = doc(db, "Users", currentUser.uid);
+          const userDoc = await getDoc(userDocRef);
+          const teamID = userDoc.data().teamID;
+          console.log("Team ID: " + teamID);
+    
+
+
+
+        // Get a reference to the user document with the provided id
+        const userRef = doc(db, 'Users', userId);
+        
+        try {
+          // Update the user document with an empty teamID field
+          await updateDoc(userRef, { teamID: "auth.currentUser.teamID" });
+          console.log(`User with id ${userId}'s teamID has been updated.`);
+        } catch (error) {
+          console.error(`Error updating user with id ${userId}:`, error);
+        }
+
     }
-
-    await updateDoc(teamRef, {
-      users: arrayUnion(email)
-    });
-
-    console.log('User added to team successfully!');
-  } catch (error) {
-    console.error('Error adding user to team: ', error);
-  }
-});
-
+      });
 }
 
-// delete user from team
-const deleteFromTeamButton = document.getElementById('deleteFromTeam');
-if (deleteFromTeamButton) {
-  deleteFromTeamButton.addEventListener('click', async () => {
-    const teamId = document.getElementById('teamId').value;
-    const email = document.getElementById('email').value;
+//p0CSj59jhl50bWYimZSl
 
-    const teamRef = doc(db, 'Teams', teamId);
-
-    try {
-      const teamDoc = await getDoc(teamRef);
-
-      if (!teamDoc.exists()) {
-        console.log('No such document!');
-        return;
-      }
-
-      await updateDoc(teamRef, {
-        users: arrayRemove(email)
+const deleteButton = document.getElementById('deleteFromTeam');
+if(deleteButton) {
+    deleteButton.addEventListener('click', async () => {
+        const userId = document.getElementById('userId').value;
+      
+        // Get a reference to the user document with the provided id
+        const userRef = doc(db, 'Users', userId);
+      
+        try {
+          // Update the user document with an empty teamID field
+          await updateDoc(userRef, { teamID: '' });
+          console.log(`User with id ${userId}'s teamID has been updated.`);
+        } catch (error) {
+          console.error(`Error updating user with id ${userId}:`, error);
+        }
       });
-
-      console.log('User deleted from team successfully!');
-    } catch (error) {
-      console.error('Error deleting user from team: ', error);
-    }
-  });
 }
 
 
@@ -1074,7 +1089,7 @@ if (teamsLinks) {
       const users = [];
       querySnapshot.forEach((doc) => {
         // push the user document data to the users array
-        users.push(doc.data().email);
+        users.push(doc.data().email + ", " + doc.data().userID);
       });
 
       if (users.length != 0) {
