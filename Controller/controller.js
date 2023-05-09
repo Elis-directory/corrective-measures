@@ -869,6 +869,7 @@ if (logout) {
     logout.addEventListener('click', (e) => {
         e.preventDefault(); // stops default action
         signOut(auth).then(() => {
+            window.location.href = "index.html";
         })
     })
 }
@@ -1126,9 +1127,12 @@ if (teamsLinks) {
 const chatbox = document.querySelector('.chatbox');
 const collapseButton = document.querySelector('.collapse-button');
 
-collapseButton.addEventListener('click', () => {
-  chatbox.classList.toggle('collapsed');
-});
+if(collapseButton) {
+    collapseButton.addEventListener('click', () => {
+        chatbox.classList.toggle('collapsed');
+      });
+}
+
 
 
 
