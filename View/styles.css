@@ -718,7 +718,7 @@ body.sidebar-open #sidebar {
 	position: fixed;
 	bottom: 10px;
 	right: 10px;
-	width: 315px;
+	width: 24%;
 	background-color: #f2f0f2;
 	padding: 10px;
 	box-sizing: border-box;
@@ -729,6 +729,7 @@ body.sidebar-open #sidebar {
   
 .chatbox.collapsed {
 	height: 4rem;
+	width: 6.5%;
 	overflow: hidden;
 }
   
@@ -789,7 +790,7 @@ body.sidebar-open #sidebar {
 	transition: all 0.3s ease-in-out;
 	margin-bottom: 12px;
   }
-  
+
 /* ================================================= */
 /* Misc.
 /* ================================================= */
