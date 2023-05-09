@@ -1156,8 +1156,14 @@ if (form) {
           const teamRef = doc(db, 'Teams', teamId);
 
           // Update the chat array in the team document
+
+         
+          
           await updateDoc(teamRef, {
-            chat: arrayUnion(message)
+            chat: arrayUnion({
+              message: message,
+              senderId: currentUser.uid
+            })
           });
 
           console.log(`Message "${message}" has been added to the chat.`);
@@ -1166,10 +1172,15 @@ if (form) {
           const teamSnapshot = await getDoc(teamRef);
           const chat = teamSnapshot.data().chat;
           messages.innerHTML = '';
-          chat.forEach((message) => {
+          chat.forEach((chatMessage) => {
             const messageElement = document.createElement('div');
-            messageElement.classList.add('message', 'received');
-            messageElement.innerHTML = `<p>${message}</p>`;
+            messageElement.classList.add('message');
+            if (chatMessage.senderId === currentUser.uid) {
+              messageElement.classList.add('sent');
+            } else {
+              messageElement.classList.add('received');
+            }
+            messageElement.innerHTML = `<p>${chatMessage.message}</p>`;
             messages.appendChild(messageElement);
           });
           messages.scrollTop = messages.scrollHeight;
@@ -1181,6 +1192,7 @@ if (form) {
     }
   });
 }
+
 
 
 
