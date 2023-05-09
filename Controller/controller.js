@@ -739,7 +739,7 @@ async function createTeam() {
       await setDoc(newTeamRef, {
         docID: newTeamId,
         admin: auth.currentUser.uid, 
-        users:[],
+        chat:[],
         tickets: []
       });
       console.log('Team added to Firestore');
@@ -1123,30 +1123,60 @@ if (teamsLinks) {
   });
 }
 
-
-
 const chatbox = document.querySelector('.chatbox');
 const collapseButton = document.querySelector('.collapse-button');
-const form = document.querySelector('.message-form');
-const input = form.querySelector('input');
-const messages = document.querySelector('.messages');
 
 collapseButton.addEventListener('click', () => {
   chatbox.classList.toggle('collapsed');
 });
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if (input.value.trim() !== '') {
-    const message = document.createElement('div');
-    message.classList.add('message', 'sent');
-    message.innerHTML = `<p>${input.value}</p>`;
-    messages.appendChild(message);
-    messages.scrollTop = messages.scrollHeight;
-    input.value = '';
-  }
-});
 
+
+const form = document.querySelector('.message-form');
+const messages = document.querySelector('.messages');
+
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = form.querySelector('input');
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      if (input.value.trim() !== '') {
+        const userDocRef = doc(db, "Users", currentUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        const teamId = userDocSnap.data().teamID;
+        const message = input.value.trim();
+        input.value = '';
+        try {
+          // Get a reference to the team document with the provided id
+          const teamRef = doc(db, 'Teams', teamId);
+
+          // Update the chat array in the team document
+          await updateDoc(teamRef, {
+            chat: arrayUnion(message)
+          });
+
+          console.log(`Message "${message}" has been added to the chat.`);
+
+          // Display the entire chat array in the chat box
+          const teamSnapshot = await getDoc(teamRef);
+          const chat = teamSnapshot.data().chat;
+          messages.innerHTML = '';
+          chat.forEach((message) => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'received');
+            messageElement.innerHTML = `<p>${message}</p>`;
+            messages.appendChild(messageElement);
+          });
+          messages.scrollTop = messages.scrollHeight;
+
+        } catch (error) {
+          console.error(`Error adding message "${message}" to the chat:`, error);
+        }
+      }
+    }
+  });
+}
 
 
 
