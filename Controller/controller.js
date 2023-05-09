@@ -1118,7 +1118,27 @@ if (teamsLinks) {
 
 
 
+const chatbox = document.querySelector('.chatbox');
+const collapseButton = document.querySelector('.collapse-button');
+const form = document.querySelector('.message-form');
+const input = form.querySelector('input');
+const messages = document.querySelector('.messages');
 
+collapseButton.addEventListener('click', () => {
+  chatbox.classList.toggle('collapsed');
+});
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (input.value.trim() !== '') {
+    const message = document.createElement('div');
+    message.classList.add('message', 'sent');
+    message.innerHTML = `<p>${input.value}</p>`;
+    messages.appendChild(message);
+    messages.scrollTop = messages.scrollHeight;
+    input.value = '';
+  }
+});
 
 
 
