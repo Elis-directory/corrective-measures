@@ -92,10 +92,6 @@ class User {
 }
 const cUser = new User();
 
-const storyBoardFrame = document.getElementById('storyboard-iframe');
-//iframe.contentWindow.location.reload();
-
-
 
 //     if (user) {
 //       // User is signed in
@@ -115,16 +111,17 @@ const storyBoardFrame = document.getElementById('storyboard-iframe');
 // });
 
 // as soon as page loads get data from database and create boards
-let numOfBoards = 0;
+let numOfBoards = 1;
 let BoardsInDatabase = 0;
 document.addEventListener('DOMContentLoaded', async function() {
-
     let teamID;
-        
+    
     // Wait for cUser to have a non-null TeamID value
     while (!(teamID = cUser.getTeamID())) {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
     }
+    
     //When a board gets updated
     const colRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/`)
     const q = query(colRef, orderBy("bTitle"));
@@ -154,9 +151,11 @@ async function createBoardsFromDB(qSH) {
 
 const addBoardBtn = document.getElementById("add-board-btn")
 if (addBoardBtn) {
-    addBoardBtn.addEventListener("click", function (e) {
+    addBoardBtn.addEventListener("click", async function (e) {
         e.preventDefault(); // stops default action
-        addNewBoard()
+        await addNewBoard()
+        location.reload()
+        
     })
 }
 
@@ -172,9 +171,9 @@ async function addNewBoard() {
     // get refrence to all boards on database
     const boardRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/`);
     // add board to database
-    addDoc(boardRef, {
+    await addDoc(boardRef, {
         // make the board title 'Board' and current number of bords
-        bTitle: `Board ${numOfBoards}`,
+        bTitle: `New Board`,
     }).then((docRef) => {
        
         // create new boad on site with id created from firestore
@@ -185,21 +184,26 @@ async function addNewBoard() {
             // create new board on site with id created from Firestore
             addBoard(docRef.id, boardTitle);
         });
+        //location.reload()
     }).catch((error) => {
         console.error("Error adding Board to database: ", error);
     });
+    
+   
 }
 
 
 
 async function addBoard(id, boardTitle) {
     let teamID;
-    
     // Wait for cUser to have a non-null TeamID value
-    while (!(teamID = cUser.getTeamID())) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-    if (numOfBoards <= BoardsInDatabase) {
+        while (!(teamID = cUser.getTeamID())) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+    if(numOfBoards <= BoardsInDatabase){
+        numOfBoards++
+        
+    
         // Create a new board element
 
         //create new board div
@@ -251,7 +255,7 @@ async function addBoard(id, boardTitle) {
             deleteBoard(boardRef, boardElement);
         });
 
-        addTicketBtn.addEventListener('click', function (event) {
+        addTicketBtn.addEventListener('click', async function (event) {
             event.preventDefault();
             const boardElement = event.target.closest('.board');
             const boardId = boardElement.dataset.boardId;
@@ -266,18 +270,19 @@ async function addBoard(id, boardTitle) {
         //if there is a board with a title on the page
         if (boardT) {
             //if input feild is changed
-            boardT.addEventListener("input", function () {
+            boardT.addEventListener("input", async function () {
                 //get refence to the board on firebase to update title
                 const titleRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${id}`);
                 
                 // get the board document
-                getDoc(titleRef).then((docSnap) => {
+                await getDoc(titleRef).then((docSnap) => {
                     // if sucessful
                     if (docSnap.exists()) {
                         // change board title to what is in textbox 
                         setDoc(titleRef, {
                             bTitle: boardT.value
                         }).then(() => {
+                            
                             console.log('Document successfully updated! new title is', boardT.value );
                         })
                             .catch((error) => {
@@ -295,99 +300,108 @@ async function addBoard(id, boardTitle) {
         const ticketList = newBoard.querySelector('#TicketList')
         // call fucntion to display tickets on screen
         viewTicketList(ticketList, id)
+        
     }
+    
+    
 }
 
-function deleteBoard(board, elem) {
+async function deleteBoard(board, elem) {
     // remove board from html
-    elem.remove();
+    await elem.remove();
     // remove board from firebase
-    deleteDoc(board);
+    await deleteDoc(board);
+    await numOfBoards--
+    await location.reload()
 }
+
 //===========================================Show Tickets On Site===================================
 //placeToAdd: html in board to display ticket list in
 //Board ID: ID of board in firebase to get tickets from
+
 async function viewTicketList(placeToAdd, BoardId) {
-    // create reference to ticket list associated with the board
+    // Wait for cUser to have a non-null TeamID value
     let teamID;
-     // Wait for cUser to have a non-null TeamID value
     while (!(teamID = cUser.getTeamID())) {
         await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    const colRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets`)
-    console.log(colRef)
+    // create reference to ticket list associated with the board
+    const colRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets`);
+
     // order tickets by priority
-    const q = query(colRef, orderBy("priority"));
+    const q  = query(colRef, orderBy("priority"));
 
-    // get collection data
-    getDocs(q)
-        .then((snapshot) => {
-            // set tickets to be an empty list
-            let tickets = []
-            //for eatch ticket pus it into ticket list
-            snapshot.docs.forEach(doc => {
-                tickets.push({ ...doc.data(), id: doc.id })
-            });
-            // call setupTickets function with created list of sorted tickets
-            
-            console.log(tickets)
-            setupTickets(tickets);
-        }).catch(err => {
-            // else diaplay error
-            setupTickets([]);
-            console.log(err.message)
-            
-        })
+    try {
+        // get collection data
+        const snapshot = await getDocs(q);
 
-    const setupTickets = (data) => {
+        // set tickets to be an empty list
+        let tickets = [];
+
+        // for each ticket, push it into the ticket list
+        snapshot.docs.forEach(doc => {
+            tickets.push({ ...doc.data(), id: doc.id });
+        });
+
+        // call setupTickets function with created list of sorted tickets
+        setupTickets(tickets);
+    } catch (err) {
+        // else display error
+        setupTickets([]);
+        console.log(err.message);
+    }
+    
+    async function setupTickets(data) {
         // create an empty div to store created modals for each ticket HTML
         const modals = document.createElement('div');
-
-
-        // if there are tickets in the list
-        if (data.length != 0) {
+        if (data.length !== 0) {
             // placeholder for html code
             let html = "";
-
+            let uname = "";
             // go through each ticket
-            data.forEach(ticket => {
-                //const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticket.id}`);
-
+            data.forEach(async(ticket) => {
+                
                 // make modal id to link to current ticket
                 const modalId = "modal-" + ticket.id;
 
+
                 // ticket items holds what is in the modal
                 const ticketItems = `
-                <div class="modal-content">
-                    <h4 class="ticket-modal-title">Ticket Info</h4>
-                    <br/>
-                    <form id="ticket-form${ticket.id}" class="ticket-form" data-ticket-id="${ticket.id}">
-                        <div class="ticket-field" id="ticket-field">
-                            <label for="modal-ticket-title${ticket.id}">Title:</label>
-                            <textarea id="modal-ticket-title${ticket.id}" name="title" class="ticket-modal-components 
-                            modal-ticket-title">${ticket.title}</textarea>
-                            <br />
+                    <div class="modal-content">
+                        <h4 class="ticket-modal-title">Ticket Info</h4>
+                        <br/>
+                        <form id="ticket-form${ticket.id}" class="ticket-form" data-ticket-id="${ticket.id}">
+                            <div class="ticket-field" id="ticket-field">
+                                <label for="modal-ticket-title${ticket.id}">Title:</label>
+                                <textarea id="modal-ticket-title${ticket.id}" name="title" class="ticket-modal-components 
+                                modal-ticket-title">${ticket.title}</textarea>
+                                <br />
 
-                            <label for="modal-ticket-priority${ticket.id}">Priority:</label>
-                            <textarea id="modal-ticket-priority${ticket.id}" name="priority" class="ticket-modal-components 
-                            modal-ticket-priority">${ticket.priority}</textarea>
+                                <label for="modal-ticket-priority${ticket.id}">Priority:</label>
+                                <textarea id="modal-ticket-priority${ticket.id}" name="priority" class="ticket-modal-components 
+                                modal-ticket-priority">${ticket.priority}</textarea>
 
-                            <br />
-                            <label for="modal-ticket-description${ticket.id}">Description:</label>
-                            <textarea id="modal-ticket-description${ticket.id}" name="description" class="ticket-modal-components 
-                            modal-ticket-description">${ticket.description}</textarea>
+                                <br />
+                                <label for="modal-ticket-description${ticket.id}">Description:</label>
+                                <textarea id="modal-ticket-description${ticket.id}" name="description" class="ticket-modal-components 
+                                modal-ticket-description">${ticket.description}</textarea>
 
-                            <!-- Delete Ticket Button -->
-                            <button class="ticket-modal-btn btn btn-sm btn-outline-secondary delete-ticket" 
-                            data-ticket-id="${ticket.id}" id="delete-ticket">Delete Ticket</button>
-                            
-                            <!-- Save Changes Button -->
-                            <button class="ticket-modal-btn btn btn-sm btn-outline-secondary save-changes" 
-                            data-ticket-id="${ticket.id}" id="save-changes" style="display:none;">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
+                                <br />
+                                <label for="modal-ticket-created${ticket.id}">Created By:</label>
+                                <textarea id="modal-ticket-created${ticket.id}" name="created" class="ticket-modal-components 
+                                modal-ticket-created" disabled >${ticket.createdBy}</textarea>
+
+                                <!-- Delete Ticket Button -->
+                                <button class="ticket-modal-btn btn btn-sm btn-outline-secondary delete-ticket" 
+                                data-ticket-id="${ticket.id}" id="delete-ticket">Delete Ticket</button>
+                                
+                                <!-- Save Changes Button -->
+                                <button class="ticket-modal-btn btn btn-sm btn-outline-secondary save-changes" 
+                                data-ticket-id="${ticket.id}" id="save-changes" style="display:none;">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
                 `;
 
                 // li holds the ticket title and displays them as buttons in dashboard
@@ -403,7 +417,7 @@ async function viewTicketList(placeToAdd, BoardId) {
 
                 // append ticket list into html
                 html += li;
-
+                
                 // create modal and place ticket info in modal code with associated id
                 modals.innerHTML += `<div id="${modalId}" class="modal myModalStyling">${ticketItems}</div>`;
                 document.body.appendChild(modals);
@@ -422,16 +436,20 @@ async function viewTicketList(placeToAdd, BoardId) {
                 // const ticketForm = document.querySelector('#ticket-form' + ticket.id);
                 // let isChanged = false;
                 
-                deleteTicketBtns.forEach((button) => {
-                    button.addEventListener('click', function (event) {
+                 deleteTicketBtns.forEach((button) => {
+                    button.addEventListener('click', async function (event) {
                         event.preventDefault();
-                        // get the ID of the ticket to delete
                         const ticketId = button.dataset.ticketId;
-                        // delete the ticket from the database
-                        
-                        const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticketId}`);
+                        const ticketItem = document.querySelector(`#ticketToClick${ticketId}`);
 
-                        deleteDoc(ticketRef).then(() => {
+                        // get the ID of the ticket to delete
+                        
+                        // delete the ticket from the database
+                       
+                        const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticketId}`);
+                        console.log(ticketItem)
+                        ticketItem.remove()
+                        await deleteDoc(ticketRef).then(() => {
                             console.log(`Ticket ${ticketId} deleted successfully`);
                             // remove the modal from the DOM
                             const modal = button.closest('.modal');
@@ -442,22 +460,21 @@ async function viewTicketList(placeToAdd, BoardId) {
                         // close the modal
                         const modal = button.closest('.modal');
                         const modalInstance = M.Modal.getInstance(modal);
-                        storyBoardFrame.contentWindow.location.reload();
                         modalInstance.close();
                     });
                 });
                 M.Modal.init(document.querySelectorAll('.modal'), {});
-
+                
                 if (ticketTitle) {
                     
                     //if input feild is changed
-                    ticketTitle.addEventListener("input", function () {
+                    ticketTitle.addEventListener("input", async function () {
                         //get refence to the board on firebase to update title
                         console.log('Ticket title being changed with id of => ', ticket.id)
-                        const ticketRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticket.id}`);
+                        const ticketRef = await doc(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets/${ticket.id}`);
                         
                         // get the board document
-                        getDoc(ticketRef).then((docSnap) => {
+                        await getDoc(ticketRef).then((docSnap) => {
                             // if sucessful
                             if (docSnap.exists()) {
                                 // change board title to what is in textbox 
@@ -560,78 +577,7 @@ async function viewTicketList(placeToAdd, BoardId) {
 
                     
                 }
-
-            //     titleTextArea.addEventListener('input', () => {
-            //         isChanged = true;
-            //         saveChangesBtn.style.display = 'inline';
-            //     });
-                
-            //     priorityTextArea.addEventListener('input', () => {
-            //         isChanged = true;
-            //         saveChangesBtn.style.display = 'inline';
-            //     });
-                
-            //     descriptionTextArea.addEventListener('input', () => {
-            //         isChanged = true;
-            //         saveChangesBtn.style.display = 'inline';
-            //     });
-                
-            //     saveChangesBtn.addEventListener('click', () => {
-            //         if(isChanged){
-            //             const ticketRef = doc(db, 'Boards/' + BoardId + '/Tickets/', ticket.id);
-            //             // Save changes to database
-            //             const updatedTitle = titleTextArea.value;
-            //             const updatedPriority = priorityTextArea.value;
-            //             const updatedDescription = descriptionTextArea.value;
-
-
-            //             // Get the reference to the ticket document in Firebase
-            //             console.log(ticket.id)
-            //             console.log('Boards/' + BoardId + '/Tickets/' + ticket.id)
-            //             console.log('TICKET REF', ticketRef.path)
-                        
-                   
-            //             // get the board document
-            //             //console.log(ticketRef)
-            //             getDoc(ticketRef).then((docSnap) => {
-            //                 // if sucessful
-            //                 console.log(docSnap)
-            //                 if (docSnap.exists()) {
-            //                     // change board title to what is in textbox 
-            //                     setDoc(ticketRef, {
-            //                         title: updatedTitle,
-            //                         priority: updatedPriority,
-            //                         description: updatedDescription
-            //                     }, { merge: true })
-            //                     .then(() => {
-            //                         console.log('Document successfully updated! new title is', updatedTitle);
-            //                         console.log('Document successfully updated! new priority is', updatedPriority);
-            //                         console.log('Document successfully updated! new description is', updatedDescription);
-                                    
-            //                         // Update the ticket information in the UI
-            //                         const ticketTitle = document.querySelector('#modal-ticket-title' + ticket.id);
-            //                         const ticketPriority = document.querySelector('#modal-ticket-priority' + ticket.id);
-            //                         const ticketDescription = document.querySelector('#modal-ticket-description' + ticket.id);
-            //                         const titleEl = document.querySelector('#ticketToClick' + ticket.id);
-            //                         titleEl.textContent = updatedTitle;
-                                    
-            //                         ticketTitle.value = updatedTitle;
-            //                         ticketPriority.value = updatedPriority;
-            //                         ticketDescription.value = updatedDescription;
-            //                     })
-            //                     .catch((error) => {
-            //                         console.error('Error updating document: ', error);
-            //                     });
-            //                 }
-            //             }).catch((error) => {
-            //                 console.error("Error getting document:", error);
-            //             });
-
-            //           isChanged = false;
-            //           saveChangesBtn.style.display = 'none';
-            //         }
-            //     });
-
+             
             });
             
             // put list of ticket buttons in correct board
@@ -644,7 +590,6 @@ async function viewTicketList(placeToAdd, BoardId) {
 
     };
 }
-
 
 //================================================================================================
 
@@ -673,35 +618,47 @@ const userConverter = {
 
 
 //===========================================Create Ticket========================================
+let isAdding = false;
+
 async function createNewTicket(modal, getInfo, boardId) {
+    if (isAdding) {
+        return;
+    }
+    isAdding = true;
     let teamID;
+    let gitI;
     // Wait for cUser to have a non-null TeamID value
-    while (!(teamID = cUser.getTeamID())) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+    while (!(teamID = cUser.getTeamID()) && !(gitI = getInfo)) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
     }
     const boardRef = doc(db, `Teams/${cUser.getTeamID()}/Boards/${boardId}`);
 
-    getInfo.addEventListener('submit', (e) => {
-        e.preventDefault()
+    const submitHandler = (e) => {
+        e.preventDefault();
         // Create a new ticket object
         const newTicket = {
-            createdBy: auth.currentUser.uid,
+            createdBy: cUser.username,
             title: getInfo.title.value,
             priority: getInfo.priority.value,
             description: getInfo.description.value,
-        }
-        console.log(newTicket)
+        };
+        console.log(newTicket);
         // Add the new ticket to the tickets collection under the board document in Firestore
         addDoc(collection(boardRef, "Tickets"), newTicket)
             .then(() => {
                 console.log("Ticket added to Firestore!");
-                getInfo.reset()
+                getInfo.reset();
+                location.reload()
                 M.Modal.getInstance(modal).close(); // close the modal
+                getInfo.removeEventListener("submit", submitHandler); // remove the event listener
+                isAdding = false;
             })
             .catch((error) => {
                 console.error("Error adding ticket to Firestore: ", error);
             });
-    });
+    };
+
+    getInfo.addEventListener("submit", submitHandler);
 }
 //================================================================================================
 const myButton = document.querySelector('#myButton');
@@ -851,14 +808,34 @@ onAuthStateChanged(auth, async (user) => {
             cUser.setUserID(userData.userID);
             cUser.setUsername(userData.username);
             cUser.displayAll();
-        } else {
-            console.log('User document does not exist');
+            const teamId = userDocSnapshot.data().teamID;
+              try {
+                const teamRef = doc(db, 'Teams', teamId);
+                const teamSnapshot = await getDoc(teamRef);
+                const chat = teamSnapshot.data().chat;
+                messages.innerHTML = '';
+                chat.forEach((chatMessage) => {
+                  const messageElement = document.createElement('div');
+                  messageElement.classList.add('message');
+                  if (chatMessage.senderId === userData.userID) {
+                    messageElement.classList.add('sent');
+                  } else {
+                    messageElement.classList.add('received');
+                  }
+                  messageElement.innerHTML = `<p>${chatMessage.message}</p>`;
+                  messages.appendChild(messageElement);
+                });
+                messages.scrollTop = messages.scrollHeight;
+              } catch (error) {
+                console.error('Error retrieving chat messages:', error);
+              }
         }
     } else {
         // User is signed out
         console.log('user logged out');
     }
 });
+
 //================================================================================================
 
 //=======================CHECK TO SEE IF USER IS SIGNED INTO SITE OR NOT==========================
@@ -1096,7 +1073,7 @@ if (teamsLinks) {
       const users = [];
       querySnapshot.forEach((doc) => {
         // push the user document data to the users array
-        users.push(doc.data().email + ", " + doc.data().userID);
+        users.push("Email: " + doc.data().email + ", User ID: " + doc.data().userID);
       });
 
       if (users.length != 0) {
@@ -1125,14 +1102,25 @@ if (teamsLinks) {
 }
 
 const chatbox = document.querySelector('.chatbox');
+if(chatbox){
+chatbox.classList.toggle('collapsed');
+}
 const collapseButton = document.querySelector('.collapse-button');
 
 if(collapseButton) {
-    collapseButton.addEventListener('click', () => {
+  
+    
+    
+    collapseButton.addEventListener('click', async() => {
         chatbox.classList.toggle('collapsed');
+           // Retrieve the chat messages when the page loads
+   
       });
+
+    
 }
 
+    
 
 
 
@@ -1156,9 +1144,6 @@ if (form) {
           const teamRef = doc(db, 'Teams', teamId);
 
           // Update the chat array in the team document
-
-         
-          
           await updateDoc(teamRef, {
             chat: arrayUnion({
               message: message,
@@ -1166,9 +1151,7 @@ if (form) {
             })
           });
 
-          console.log(`Message "${message}" has been added to the chat.`);
-
-          // Display the entire chat array in the chat box
+          console.log(`Message "${message}" has been added to the chat.`);// Display the entire chat array in the chat box
           const teamSnapshot = await getDoc(teamRef);
           const chat = teamSnapshot.data().chat;
           messages.innerHTML = '';
@@ -1191,9 +1174,8 @@ if (form) {
       }
     }
   });
+
 }
-
-
 
 
 // create a query for all users with the same teamID as the current user
