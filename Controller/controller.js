@@ -115,14 +115,13 @@ let numOfBoards = 1;
 let BoardsInDatabase = 0;
 document.addEventListener('DOMContentLoaded', async function() {
     let teamID;
-    console.log("before while loop");
+    
     // Wait for cUser to have a non-null TeamID value
     while (!(teamID = cUser.getTeamID())) {
         await new Promise((resolve) => setTimeout(resolve, 100));
 
     }
-    console.log("after while loop");
-    console.log("dom load")
+    
     //When a board gets updated
     const colRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/`)
     const q = query(colRef, orderBy("bTitle"));
@@ -201,8 +200,6 @@ async function addBoard(id, boardTitle) {
         while (!(teamID = cUser.getTeamID())) {
             await new Promise((resolve) => setTimeout(resolve, 100));
         }
-    console.log("num of boards:",numOfBoards)
-    console.log("num of boards in Db:",BoardsInDatabase)
     if(numOfBoards <= BoardsInDatabase){
         numOfBoards++
         
@@ -321,6 +318,7 @@ async function deleteBoard(board, elem) {
 //===========================================Show Tickets On Site===================================
 //placeToAdd: html in board to display ticket list in
 //Board ID: ID of board in firebase to get tickets from
+
 async function viewTicketList(placeToAdd, BoardId) {
     // Wait for cUser to have a non-null TeamID value
     let teamID;
@@ -332,7 +330,7 @@ async function viewTicketList(placeToAdd, BoardId) {
     const colRef = collection(db, `Teams/${cUser.getTeamID()}/Boards/${BoardId}/Tickets`);
 
     // order tickets by priority
-    const q = query(colRef, orderBy("priority"));
+    const q  = query(colRef, orderBy("priority"));
 
     try {
         // get collection data
@@ -353,20 +351,20 @@ async function viewTicketList(placeToAdd, BoardId) {
         setupTickets([]);
         console.log(err.message);
     }
-
+    
     async function setupTickets(data) {
         // create an empty div to store created modals for each ticket HTML
         const modals = document.createElement('div');
-
-        // if there are tickets in the list
         if (data.length !== 0) {
             // placeholder for html code
             let html = "";
-
+            let uname = "";
             // go through each ticket
-            data.forEach(ticket => {
+            data.forEach(async(ticket) => {
+                
                 // make modal id to link to current ticket
                 const modalId = "modal-" + ticket.id;
+
 
                 // ticket items holds what is in the modal
                 const ticketItems = `
@@ -388,6 +386,11 @@ async function viewTicketList(placeToAdd, BoardId) {
                                 <label for="modal-ticket-description${ticket.id}">Description:</label>
                                 <textarea id="modal-ticket-description${ticket.id}" name="description" class="ticket-modal-components 
                                 modal-ticket-description">${ticket.description}</textarea>
+
+                                <br />
+                                <label for="modal-ticket-created${ticket.id}">User Who Created Ticket</label>
+                                <textarea id="modal-ticket-created${ticket.id}" name="created" class="ticket-modal-components 
+                                modal-ticket-created" disabled >${ticket.createdBy}</textarea>
 
                                 <!-- Delete Ticket Button -->
                                 <button class="ticket-modal-btn btn btn-sm btn-outline-secondary delete-ticket" 
@@ -414,7 +417,7 @@ async function viewTicketList(placeToAdd, BoardId) {
 
                 // append ticket list into html
                 html += li;
-
+                
                 // create modal and place ticket info in modal code with associated id
                 modals.innerHTML += `<div id="${modalId}" class="modal myModalStyling">${ticketItems}</div>`;
                 document.body.appendChild(modals);
@@ -433,7 +436,7 @@ async function viewTicketList(placeToAdd, BoardId) {
                 // const ticketForm = document.querySelector('#ticket-form' + ticket.id);
                 // let isChanged = false;
                 
-                deleteTicketBtns.forEach((button) => {
+                 deleteTicketBtns.forEach((button) => {
                     button.addEventListener('click', async function (event) {
                         event.preventDefault();
                         const ticketId = button.dataset.ticketId;
@@ -461,7 +464,7 @@ async function viewTicketList(placeToAdd, BoardId) {
                     });
                 });
                 M.Modal.init(document.querySelectorAll('.modal'), {});
-
+                
                 if (ticketTitle) {
                     
                     //if input feild is changed
@@ -574,7 +577,7 @@ async function viewTicketList(placeToAdd, BoardId) {
 
                     
                 }
-
+             
             });
             
             // put list of ticket buttons in correct board
@@ -587,7 +590,6 @@ async function viewTicketList(placeToAdd, BoardId) {
 
     };
 }
-
 
 //================================================================================================
 
@@ -635,7 +637,7 @@ async function createNewTicket(modal, getInfo, boardId) {
         e.preventDefault();
         // Create a new ticket object
         const newTicket = {
-            createdBy: auth.currentUser.uid,
+            createdBy: cUser.username,
             title: getInfo.title.value,
             priority: getInfo.priority.value,
             description: getInfo.description.value,
@@ -814,20 +816,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-async function waitForIframe() {
-    let iframe = null;
-    while (iframe === null) {
-      iframe = await document.getElementById('storyboard-iframe');
-      if (iframe !== null) {
-        iframe.src = iframe.src;
-        console.log(IframeSource);
-      } else {
-        console.log('Element with ID storyboard-iframe not found. Waiting...');
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before checking again
-        
-      }
-    }
-}
 //================================================================================================
 
 //=======================CHECK TO SEE IF USER IS SIGNED INTO SITE OR NOT==========================
