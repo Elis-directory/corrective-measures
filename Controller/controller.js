@@ -336,6 +336,7 @@ async function viewTicketList(placeToAdd, BoardId) {
         // get collection data
         const snapshot = await getDocs(q);
 
+
         // set tickets to be an empty list
         let tickets = [];
 
@@ -343,6 +344,7 @@ async function viewTicketList(placeToAdd, BoardId) {
         snapshot.docs.forEach(doc => {
             tickets.push({ ...doc.data(), id: doc.id });
         });
+
 
         // call setupTickets function with created list of sorted tickets
         setupTickets(tickets);
@@ -388,7 +390,9 @@ async function viewTicketList(placeToAdd, BoardId) {
                                 modal-ticket-description">${ticket.description}</textarea>
 
                                 <br />
+
                                 <label for="modal-ticket-created${ticket.id}">Created By:</label>
+
                                 <textarea id="modal-ticket-created${ticket.id}" name="created" class="ticket-modal-components 
                                 modal-ticket-created" disabled >${ticket.createdBy}</textarea>
 
@@ -808,6 +812,7 @@ onAuthStateChanged(auth, async (user) => {
             cUser.setUserID(userData.userID);
             cUser.setUsername(userData.username);
             cUser.displayAll();
+
             const teamId = userDocSnapshot.data().teamID;
               try {
                 const teamRef = doc(db, 'Teams', teamId);
@@ -829,6 +834,7 @@ onAuthStateChanged(auth, async (user) => {
               } catch (error) {
                 console.error('Error retrieving chat messages:', error);
               }
+
         }
     } else {
         // User is signed out
